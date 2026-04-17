@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 
 const ease = [0.22, 1, 0.36, 1] as const
-const DURATION = 900
+const DURATION = 700
 const STORAGE_KEY = 'bigaxel:loader-seen:v1'
 
 const LETTERS = ['B', 'i', 'g', ' ', 'A', 'x', 'e', 'l']

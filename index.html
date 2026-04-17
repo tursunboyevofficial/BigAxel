@@ -17,27 +17,15 @@
     <link rel="dns-prefetch" href="https://commons.wikimedia.org" />
     <link rel="dns-prefetch" href="https://en.wikipedia.org" />
 
-    <!-- Preload the two most-used fonts so they fetch in parallel with JS. -->
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff"
-      href="https://dyninno.com/wp-content/themes/dyninno/assets/fonts/Metropolis-Regular.woff"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff"
-      href="https://dyninno.com/wp-content/themes/dyninno/assets/fonts/Metropolis-Medium.woff"
-      crossorigin
-    />
+    <!-- Self-hosted fonts, preloaded so they render with the first paint. -->
+    <link rel="preload" as="font" type="font/woff" href="/fonts/Metropolis-Regular.woff" crossorigin />
+    <link rel="preload" as="font" type="font/woff" href="/fonts/Metropolis-Medium.woff" crossorigin />
 
     <link
       rel="preload"
       as="image"
-      href="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=80"
-      imagesrcset="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80 1200w, https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=80 2000w"
+      href="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fm=webp&fit=crop&w=1600&q=75"
+      imagesrcset="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fm=webp&fit=crop&w=900&q=75 900w, https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fm=webp&fit=crop&w=1600&q=75 1600w"
       imagesizes="100vw"
       fetchpriority="high"
     />

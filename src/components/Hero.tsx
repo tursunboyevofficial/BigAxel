@@ -15,19 +15,19 @@ export function Hero() {
       {/* 4K aviation wallpaper — Unsplash, commercial-use OK */}
       <div className="absolute inset-0 z-0">
         <motion.img
-          src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=80"
+          src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fm=webp&fit=crop&w=1600&q=75"
           srcSet="
-            https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80 1200w,
-            https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=80 2000w
+            https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fm=webp&fit=crop&w=900&q=75 900w,
+            https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fm=webp&fit=crop&w=1600&q=75 1600w
           "
           sizes="100vw"
           alt="Aircraft silhouetted against a golden sunset sky"
           fetchPriority="high"
           decoding="async"
           className="h-full w-full object-cover object-center"
-          initial={{ scale: 1.08 }}
+          initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 14, ease: 'easeOut' }}
+          transition={{ duration: 8, ease: 'easeOut' }}
         />
         {/* Editorial dark gradient */}
         <div
