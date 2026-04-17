@@ -16,18 +16,7 @@ import { BRANCHES } from '@/data/branches'
 import { COMPANIES } from '@/data/companies'
 import { cn } from '@/lib/utils'
 import { submitApplication } from '@/lib/telegram'
-
-const ROLES = [
-  'Sales agent',
-  'Ticketing agent',
-  'Account manager',
-  'Customer support',
-  'Team lead',
-  'Engineer',
-  'Designer',
-  'Operations',
-  'Other',
-]
+import { useT } from '@/lib/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -56,6 +45,11 @@ const INITIAL: FormState = {
 }
 
 export function CareersApply() {
+  const t = useT()
+  const ROLES = t<string[]>('apply.roles')
+  const roleList = Array.isArray(ROLES) ? ROLES : []
+  const nextItems = t<string[]>('apply.nextItems')
+  const nextList = Array.isArray(nextItems) ? nextItems : []
   const [form, setForm] = useState<FormState>(INITIAL)
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [submitted, setSubmitted] = useState(false)
@@ -88,12 +82,12 @@ export function CareersApply() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const next: Partial<Record<keyof FormState, string>> = {}
-    if (!form.fullName.trim()) next.fullName = 'Required'
-    if (!form.email.trim()) next.email = 'Required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = 'Enter a valid email'
-    if (!form.role.trim()) next.role = 'Pick a role'
-    if (!form.branch.trim()) next.branch = 'Pick a branch'
-    if (!form.about.trim() || form.about.trim().length < 20) next.about = 'Tell us a bit more (20+ chars)'
+    if (!form.fullName.trim()) next.fullName = t('apply.errors.required')
+    if (!form.email.trim()) next.email = t('apply.errors.required')
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = t('apply.errors.invalidEmail')
+    if (!form.role.trim()) next.role = t('apply.errors.pickRole')
+    if (!form.branch.trim()) next.branch = t('apply.errors.pickBranch')
+    if (!form.about.trim() || form.about.trim().length < 20) next.about = t('apply.errors.aboutTooShort')
     setErrors(next)
     if (Object.keys(next).length > 0) return
 
@@ -104,7 +98,7 @@ export function CareersApply() {
       setDeliveryInfo({ sent, total })
       setSubmitted(true)
     } catch (err) {
-      setSendError(err instanceof Error ? err.message : 'Something went wrong. Try again.')
+      setSendError(err instanceof Error ? err.message : t('apply.errors.generic'))
     } finally {
       setSending(false)
     }
@@ -117,7 +111,7 @@ export function CareersApply() {
           to="/"
           className="inline-flex items-center gap-2 text-brand text-[12px] uppercase tracking-[0.22em] font-semibold hover:text-brand-accent transition-colors"
         >
-          <IconArrowLeft size={14} /> Back home
+          <IconArrowLeft size={14} /> {t('apply.backHome')}
         </Link>
 
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20 items-start">
@@ -128,7 +122,7 @@ export function CareersApply() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-accent" />
               </span>
-              Careers · Now hiring
+              {t('apply.eyebrow')}
             </p>
             <h1
               className="m-0 font-medium uppercase text-brand"
@@ -139,23 +133,18 @@ export function CareersApply() {
                 letterSpacing: '-0.045em',
               }}
             >
-              Apply<br />to join us.
+              {t('apply.titleL1')}<br />{t('apply.titleL2')}
             </h1>
             <p className="text-brand-muted m-0 mt-7 max-w-[46ch]" style={{ fontSize: 18, lineHeight: '28px' }}>
-              Tell us a bit about yourself and which team fits best. We read every application and respond within one business week.
+              {t('apply.description')}
             </p>
 
             <div className="mt-10 bg-white border border-brand-line p-6">
               <p className="m-0 text-[11px] uppercase tracking-[0.22em] font-semibold text-brand-muted">
-                What happens next
+                {t('apply.nextTitle')}
               </p>
               <ol className="m-0 mt-4 p-0 list-none space-y-3">
-                {[
-                  'We review your application within 5 days',
-                  'Short intro call with our recruiter',
-                  'Team interview — meet your future colleagues',
-                  'Offer and onboarding',
-                ].map((step, i) => (
+                {nextList.map((step, i) => (
                   <li key={step} className="flex items-start gap-3 text-[14px] text-brand leading-[22px]">
                     <span className="mt-0.5 h-5 w-5 rounded-full bg-brand text-white text-[11px] font-semibold flex items-center justify-center tabular-nums shrink-0">
                       {i + 1}
@@ -194,14 +183,17 @@ export function CareersApply() {
                       fontWeight: 'normal',
                     }}
                   >
-                    Application received
+                    {t('apply.success.title')}
                   </h2>
                   <p className="m-0 mt-4 text-brand-muted max-w-[46ch] mx-auto" style={{ fontSize: 17, lineHeight: '26px' }}>
-                    Thanks, {form.fullName.split(' ')[0] || 'there'}. We'll review your application and reach out to <span className="text-brand font-semibold">{form.email}</span> within one business week.
+                    {t('apply.success.message', {
+                      name: form.fullName.split(' ')[0] || '',
+                      email: form.email,
+                    })}
                   </p>
                   {deliveryInfo && (
                     <p className="m-0 mt-3 text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
-                      Delivered to {deliveryInfo.sent} of {deliveryInfo.total} recruiter chat{deliveryInfo.total === 1 ? '' : 's'}
+                      {t('apply.success.delivered', { sent: deliveryInfo.sent, total: deliveryInfo.total })}
                     </p>
                   )}
                   <div className="mt-8 flex items-center justify-center gap-4">
@@ -215,13 +207,13 @@ export function CareersApply() {
                       }}
                       className="text-[12px] uppercase tracking-[0.18em] font-semibold text-brand pb-1 border-b border-brand hover:text-brand-accent hover:border-brand-accent transition-colors"
                     >
-                      Send another
+                      {t('apply.success.sendAnother')}
                     </button>
                     <Link
                       to="/"
                       className="inline-flex items-center gap-2 h-11 px-6 bg-brand text-white text-[12px] font-semibold uppercase tracking-[0.18em] rounded-full hover:bg-brand-accent transition-colors"
                     >
-                      Back home
+                      {t('apply.success.backHome')}
                     </Link>
                   </div>
                 </motion.div>
@@ -236,7 +228,7 @@ export function CareersApply() {
                   {/* Progress */}
                   <div className="px-5 sm:px-6 lg:px-10 pt-5 pb-4 border-b border-brand-line flex items-center justify-between gap-3 flex-wrap">
                     <p className="m-0 text-[11px] uppercase tracking-[0.22em] font-semibold text-brand-muted">
-                      Application form
+                      {t('apply.formLabel')}
                     </p>
                     <div className="flex items-center gap-3">
                       <div className="relative h-1.5 w-32 bg-brand-line/70 rounded-full overflow-hidden">
@@ -260,67 +252,67 @@ export function CareersApply() {
                   </div>
 
                   <div className="p-5 sm:p-6 lg:p-10 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <Field label="Full name" error={errors.fullName} className="sm:col-span-2">
+                    <Field label={t('apply.fields.fullName')} error={errors.fullName} className="sm:col-span-2">
                       <InputWrapper>
                         <IconUser size={16} stroke={1.6} className="text-brand-muted" />
                         <input
                           type="text"
                           value={form.fullName}
                           onChange={update('fullName')}
-                          placeholder="Your full name"
+                          placeholder={t('apply.placeholders.fullName')}
                           className="flex-1 bg-transparent outline-none text-[15px] text-brand placeholder:text-brand-muted/60"
                         />
                       </InputWrapper>
                     </Field>
 
-                    <Field label="Email" error={errors.email}>
+                    <Field label={t('apply.fields.email')} error={errors.email}>
                       <InputWrapper>
                         <IconMail size={16} stroke={1.6} className="text-brand-muted" />
                         <input
                           type="email"
                           value={form.email}
                           onChange={update('email')}
-                          placeholder="you@example.com"
+                          placeholder={t('apply.placeholders.email')}
                           className="flex-1 bg-transparent outline-none text-[15px] text-brand placeholder:text-brand-muted/60"
                         />
                       </InputWrapper>
                     </Field>
 
-                    <Field label="Phone (optional)">
+                    <Field label={t('apply.fields.phoneOptional')}>
                       <InputWrapper>
                         <input
                           type="tel"
                           value={form.phone}
                           onChange={update('phone')}
-                          placeholder="+998 90 000 00 00"
+                          placeholder={t('apply.placeholders.phone')}
                           className="flex-1 bg-transparent outline-none text-[15px] text-brand placeholder:text-brand-muted/60"
                         />
                       </InputWrapper>
                     </Field>
 
-                    <Field label="Role" error={errors.role}>
+                    <Field label={t('apply.fields.role')} error={errors.role}>
                       <SelectWrapper>
                         <select
                           value={form.role}
                           onChange={update('role')}
                           className="w-full bg-transparent outline-none text-[15px] text-brand"
                         >
-                          <option value="">Pick a role…</option>
-                          {ROLES.map((r) => (
+                          <option value="">{t('apply.placeholders.rolePick')}</option>
+                          {roleList.map((r) => (
                             <option key={r} value={r}>{r}</option>
                           ))}
                         </select>
                       </SelectWrapper>
                     </Field>
 
-                    <Field label="Branch" error={errors.branch}>
+                    <Field label={t('apply.fields.branch')} error={errors.branch}>
                       <SelectWrapper>
                         <select
                           value={form.branch}
                           onChange={update('branch')}
                           className="w-full bg-transparent outline-none text-[15px] text-brand"
                         >
-                          <option value="">Pick a branch…</option>
+                          <option value="">{t('apply.placeholders.branchPick')}</option>
                           {BRANCHES.map((b) => (
                             <option key={b.slug} value={b.slug}>{b.city}, {b.country}</option>
                           ))}
@@ -328,14 +320,14 @@ export function CareersApply() {
                       </SelectWrapper>
                     </Field>
 
-                    <Field label="Company (optional)">
+                    <Field label={t('apply.fields.companyOptional')}>
                       <SelectWrapper>
                         <select
                           value={form.company}
                           onChange={update('company')}
                           className="w-full bg-transparent outline-none text-[15px] text-brand"
                         >
-                          <option value="">No preference</option>
+                          <option value="">{t('apply.placeholders.companyNone')}</option>
                           {COMPANIES.map((c) => (
                             <option key={c.slug} value={c.slug}>{c.name}</option>
                           ))}
@@ -343,32 +335,32 @@ export function CareersApply() {
                       </SelectWrapper>
                     </Field>
 
-                    <Field label="Years of experience">
+                    <Field label={t('apply.fields.experience')}>
                       <InputWrapper>
                         <input
                           type="text"
                           value={form.experience}
                           onChange={update('experience')}
-                          placeholder="e.g. 3 years"
+                          placeholder={t('apply.placeholders.experience')}
                           className="flex-1 bg-transparent outline-none text-[15px] text-brand placeholder:text-brand-muted/60"
                         />
                       </InputWrapper>
                     </Field>
 
-                    <Field label="Portfolio / LinkedIn (optional)" className="sm:col-span-2">
+                    <Field label={t('apply.fields.portfolioOptional')} className="sm:col-span-2">
                       <InputWrapper>
                         <IconPaperclip size={16} stroke={1.6} className="text-brand-muted" />
                         <input
                           type="url"
                           value={form.portfolio}
                           onChange={update('portfolio')}
-                          placeholder="https://"
+                          placeholder={t('apply.placeholders.portfolio')}
                           className="flex-1 bg-transparent outline-none text-[15px] text-brand placeholder:text-brand-muted/60"
                         />
                       </InputWrapper>
                     </Field>
 
-                    <Field label="Tell us about yourself" error={errors.about} className="sm:col-span-2">
+                    <Field label={t('apply.fields.about')} error={errors.about} className="sm:col-span-2">
                       <div className={cn(
                         'border border-brand-line bg-brand-soft/40 px-4 py-3 transition-colors focus-within:border-brand focus-within:bg-white',
                         errors.about && 'border-brand-accent'
@@ -377,7 +369,7 @@ export function CareersApply() {
                           value={form.about}
                           onChange={update('about')}
                           rows={5}
-                          placeholder="Share a few lines — what you've worked on, why Big Axel, anything that helps us know you."
+                          placeholder={t('apply.placeholders.about')}
                           className="w-full bg-transparent outline-none text-[15px] text-brand placeholder:text-brand-muted/60 resize-none"
                         />
                       </div>
@@ -394,7 +386,7 @@ export function CareersApply() {
                   <div className="px-5 sm:px-6 lg:px-10 pb-7 pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <p className="m-0 text-[12px] text-brand-muted inline-flex items-center gap-2">
                       <IconCheck size={14} className="text-brand-accent" />
-                      Your info stays private — one application, one team.
+                      {t('apply.privacy')}
                     </p>
                     <button
                       type="submit"
@@ -403,12 +395,12 @@ export function CareersApply() {
                     >
                       {sending ? (
                         <>
-                          Sending…
+                          {t('apply.sending')}
                           <IconLoader2 size={16} className="animate-spin" />
                         </>
                       ) : (
                         <>
-                          Send application
+                          {t('apply.submit')}
                           <IconSend size={16} className="transition-transform group-hover:translate-x-0.5" />
                         </>
                       )}

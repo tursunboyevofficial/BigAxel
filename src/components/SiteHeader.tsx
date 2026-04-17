@@ -1,33 +1,36 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'motion/react'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown, Globe } from 'lucide-react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { BRANCHES } from '@/data/branches'
 import { COMPANIES } from '@/data/companies'
+import { LANGUAGES, useLang, useT, type Lang } from '@/lib/i18n'
 
 type NavItem =
   | { kind: 'link'; label: string; to: string; hash?: string }
   | { kind: 'menu'; label: string; items: { label: string; meta?: string; to: string }[] }
 
-const NAV: NavItem[] = [
-  { kind: 'link', label: 'About', to: '/', hash: '#about' },
-  {
-    kind: 'menu',
-    label: 'Branches',
-    items: BRANCHES.map((b) => ({ label: b.city, meta: b.country, to: `/branches/${b.slug}` })),
-  },
-  {
-    kind: 'menu',
-    label: 'Companies',
-    items: COMPANIES.map((c) => ({ label: c.name, meta: c.sector, to: `/companies/${c.slug}` })),
-  },
-  { kind: 'link', label: 'Airlines', to: '/', hash: '#partners' },
-  { kind: 'link', label: 'Team', to: '/', hash: '#team' },
-  { kind: 'link', label: 'FAQ', to: '/', hash: '#faq' },
-]
-
 export function SiteHeader() {
+  const t = useT()
+
+  const NAV: NavItem[] = [
+    { kind: 'link', label: t('nav.about'), to: '/', hash: '#about' },
+    {
+      kind: 'menu',
+      label: t('nav.branches'),
+      items: BRANCHES.map((b) => ({ label: b.city, meta: b.country, to: `/branches/${b.slug}` })),
+    },
+    {
+      kind: 'menu',
+      label: t('nav.companies'),
+      items: COMPANIES.map((c) => ({ label: c.name, meta: c.sector, to: `/companies/${c.slug}` })),
+    },
+    { kind: 'link', label: t('nav.airlines'), to: '/', hash: '#partners' },
+    { kind: 'link', label: t('nav.team'), to: '/', hash: '#team' },
+    { kind: 'link', label: t('nav.faq'), to: '/', hash: '#faq' },
+  ]
+
   const ref = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
   const [scrolled, setScrolled] = useState(false)
@@ -108,7 +111,8 @@ export function SiteHeader() {
           )}
         </nav>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
+          <LanguageSwitcher dark={dark} />
           <Link
             to="/careers/apply"
             className={cn(
@@ -121,7 +125,7 @@ export function SiteHeader() {
             )}
             style={{ borderRadius: scrolled ? 999 : 0 }}
           >
-            Apply
+            {t('nav.apply')}
             <span aria-hidden>→</span>
           </Link>
 
@@ -169,12 +173,70 @@ export function SiteHeader() {
               onClick={() => setMobileOpen(false)}
               className="block py-3.5 px-5 text-[12px] font-semibold uppercase tracking-[0.18em] text-brand-accent"
             >
-              Apply →
+              {t('nav.apply')} →
             </Link>
           </motion.div>
         )}
       </AnimatePresence>
     </motion.header>
+  )
+}
+
+function LanguageSwitcher({ dark }: { dark?: boolean }) {
+  const { lang, setLang } = useLang()
+  const [open, setOpen] = useState(false)
+  const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0]
+
+  return (
+    <div className="relative" onMouseLeave={() => setOpen(false)}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        onMouseEnter={() => setOpen(true)}
+        aria-label="Change language"
+        className={cn(
+          'inline-flex items-center gap-1.5 h-9 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors',
+          dark ? 'text-white/90 hover:text-brand-accent' : 'text-brand hover:text-brand-accent'
+        )}
+      >
+        <Globe size={14} />
+        {current.short}
+        <ChevronDown size={12} className={cn('transition-transform', open && 'rotate-180')} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 top-full pt-2 w-[180px] z-[60]"
+          >
+            <div className="bg-white border border-brand-line shadow-2xl p-1.5">
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  onClick={() => {
+                    setLang(l.code as Lang)
+                    setOpen(false)
+                  }}
+                  className={cn(
+                    'w-full flex items-center justify-between gap-3 px-3 py-2.5 text-[12px] font-semibold uppercase tracking-[0.12em] transition-colors rounded-sm',
+                    l.code === lang
+                      ? 'bg-brand-soft text-brand'
+                      : 'text-brand hover:bg-brand-soft'
+                  )}
+                >
+                  <span>{l.label}</span>
+                  <span className="text-brand-muted tabular-nums">{l.short}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
 

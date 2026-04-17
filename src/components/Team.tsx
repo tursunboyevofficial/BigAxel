@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { IconArrowLeft, IconArrowRight, IconQuote } from '@tabler/icons-react'
 import { SectionHeading } from '@/components/Eyebrow'
 import { TEAM } from '@/data/content'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n'
 
 const ROLE_COLORS = ['#E53D2E', '#70991F', '#009A66']
 
@@ -27,9 +28,15 @@ const PHOTO_TILES: PhotoTile[] = [
 const ease = [0.22, 1, 0.36, 1] as const
 
 export function Team() {
+  const t = useT()
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
+  const [inView, setInView] = useState(false)
   const [direction, setDirection] = useState(1)
+  const sectionRef = useRef<HTMLElement | null>(null)
+
+  const quotes = t<string[]>('team.quotes')
+  const roleMap = t<Record<string, string>>('team.roles')
 
   const total = TEAM.length
   const go = (next: number) => {
@@ -39,26 +46,37 @@ export function Team() {
   }
 
   useEffect(() => {
-    if (paused) return
+    const node = sectionRef.current
+    if (!node) return
+    const io = new IntersectionObserver(
+      (entries) => setInView(entries[0]?.isIntersecting ?? false),
+      { rootMargin: '0px', threshold: 0.15 }
+    )
+    io.observe(node)
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (paused || !inView) return
     const id = setInterval(() => {
       setDirection(1)
       setActive((i) => (i + 1) % total)
     }, 7000)
     return () => clearInterval(id)
-  }, [paused, total])
+  }, [paused, inView, total])
 
   const current = TEAM[active]
   const accent = ROLE_COLORS[active % ROLE_COLORS.length]
 
   return (
-    <section id="team" className="py-[88px] lg:py-[117px] bg-brand-soft overflow-hidden">
+    <section ref={sectionRef} id="team" className="py-[88px] lg:py-[117px] bg-brand-soft overflow-hidden">
       <div className="container mx-auto px-6">
         <SectionHeading
-          eyebrow="Testimonials"
+          eyebrow={t('team.eyebrow')}
           number="04"
-          title="People-first stories, straight from the team."
-          accent="People-first"
-          description="Personal reflections from the people who make Big Axel tick — browse each story."
+          title={t('team.title')}
+          accent={t('team.titleAccent')}
+          description={t('team.description')}
         />
 
         <div
@@ -96,6 +114,7 @@ export function Team() {
                 src={tile.src}
                 alt=""
                 loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover grayscale contrast-[1.05]"
               />
               <span
@@ -120,6 +139,7 @@ export function Team() {
                   src={src}
                   alt=""
                   loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover grayscale contrast-[1.05]"
                 />
               </figure>
@@ -175,7 +195,7 @@ export function Team() {
                       }}
                     >
                       <span style={{ color: accent, fontWeight: 500 }}>“</span>
-                      {current.quote}
+                      {Array.isArray(quotes) && quotes[active] ? quotes[active] : current.quote}
                       <span style={{ color: accent, fontWeight: 500 }}>”</span>
                     </p>
 
@@ -211,7 +231,7 @@ export function Team() {
                           className="mt-1.5 text-[11px] uppercase tracking-[0.22em] font-semibold"
                           style={{ color: accent }}
                         >
-                          {current.role}
+                          {(roleMap && typeof roleMap === 'object' && roleMap[current.role]) || current.role}
                         </span>
                       </span>
                     </footer>
@@ -226,7 +246,7 @@ export function Team() {
                 <button
                   type="button"
                   onClick={() => go(active - 1)}
-                  aria-label="Previous testimonial"
+                  aria-label={t('team.prev')}
                   className="group h-11 w-11 rounded-full border border-brand-line bg-white flex items-center justify-center transition-colors hover:bg-brand hover:border-brand"
                 >
                   <IconArrowLeft size={18} className="text-brand transition-colors group-hover:text-white" />
@@ -234,7 +254,7 @@ export function Team() {
                 <button
                   type="button"
                   onClick={() => go(active + 1)}
-                  aria-label="Next testimonial"
+                  aria-label={t('team.next')}
                   className="group h-11 w-11 rounded-full border border-brand-line bg-white flex items-center justify-center transition-colors hover:bg-brand hover:border-brand"
                 >
                   <IconArrowRight size={18} className="text-brand transition-colors group-hover:text-white" />

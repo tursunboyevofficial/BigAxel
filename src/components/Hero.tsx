@@ -1,10 +1,12 @@
 import { motion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import { ArrowDown, Plane } from 'lucide-react'
+import { useT } from '@/lib/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 export function Hero() {
+  const t = useT()
   return (
     <section
       id="hero"
@@ -81,7 +83,7 @@ export function Hero() {
           >
             <span className="h-px w-10 bg-white/85" />
             <Plane size={14} className="text-brand-accent" strokeWidth={2} />
-            Big Axel Group · Est. 2014, Tashkent
+            {t('hero.eyebrow')}
           </motion.p>
 
           <h1
@@ -93,8 +95,8 @@ export function Hero() {
               letterSpacing: '-0.05em',
             }}
           >
-            <Line>Where travel</Line>
-            <Line>meets <span className="text-brand-accent">people.</span></Line>
+            <Line>{t('hero.titleLine1')}</Line>
+            <Line>{t('hero.titleLine2')}<span className="text-brand-accent">{t('hero.titleAccent')}</span></Line>
           </h1>
 
           <motion.p
@@ -105,8 +107,7 @@ export function Hero() {
             className="text-white/85 mt-10 m-0 max-w-[52ch]"
             style={{ fontSize: 19, lineHeight: '29px', letterSpacing: '-0.15px' }}
           >
-            A family of companies across travel, finance, entertainment, and technology — built in
-            Tashkent, serving clients in 50 countries.
+            {t('hero.description')}
           </motion.p>
 
           <motion.div
@@ -121,28 +122,23 @@ export function Hero() {
                 to="/careers/apply"
                 className="inline-flex items-center gap-2.5 h-12 px-7 bg-white text-brand text-[12px] font-semibold uppercase tracking-[0.18em] rounded-full hover:bg-brand-accent hover:text-white transition-colors"
               >
-                Join the team
+                {t('hero.ctaApply')}
                 <span aria-hidden>→</span>
               </Link>
               <Link
                 to="/companies"
                 className="group inline-flex items-center gap-3 text-white text-[12px] font-semibold uppercase tracking-[0.18em] pb-2 border-b border-white/60 hover:border-white hover:text-brand-accent transition-colors"
               >
-                Explore our companies
+                {t('hero.ctaCompanies')}
                 <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
               </Link>
             </div>
 
             <div className="hidden md:flex items-center gap-3 text-white/70 text-[11px] uppercase tracking-[0.22em]">
-              <span>Scroll</span>
-              <motion.span
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                className="inline-flex"
-                aria-hidden
-              >
+              <span>{t('hero.scroll')}</span>
+              <span className="inline-flex animate-arrow-bounce" aria-hidden>
                 <ArrowDown size={14} />
-              </motion.span>
+              </span>
             </div>
           </motion.div>
         </motion.div>
@@ -155,7 +151,7 @@ export function Hero() {
           className="text-[10px] uppercase font-semibold"
           style={{ writingMode: 'vertical-rl', letterSpacing: '0.4em' }}
         >
-          ©{new Date().getFullYear()} · 50 countries
+          ©{new Date().getFullYear()} · {t('hero.yearMark')}
         </span>
         <span className="h-12 w-px bg-white/40" />
       </div>

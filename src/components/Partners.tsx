@@ -4,6 +4,7 @@ import { IconBuildingAirport, IconExternalLink, IconPlaneTilt, IconUsersGroup, I
 import { SectionHeading } from '@/components/Eyebrow'
 import { AIRLINES, type Airline } from '@/data/content'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n'
 
 const ALLIANCES = ['All', 'Star Alliance', 'SkyTeam', 'Oneworld', 'Independent'] as const
 type AllianceFilter = (typeof ALLIANCES)[number]
@@ -18,6 +19,7 @@ const ALLIANCE_COLOR: Record<string, string> = {
 const ease = [0.22, 1, 0.36, 1] as const
 
 export function Partners() {
+  const t = useT()
   const [filter, setFilter] = useState<AllianceFilter>('All')
   const [selected, setSelected] = useState<Airline | null>(null)
 
@@ -38,11 +40,11 @@ export function Partners() {
     <section id="partners" className="relative py-[88px] lg:py-[117px] bg-brand-soft overflow-hidden">
       <div className="container mx-auto px-6">
         <SectionHeading
-          eyebrow="Airline partners"
+          eyebrow={t('partners.eyebrow')}
           number="02"
-          title="We work with the world's largest airlines."
-          accent="largest"
-          description="16 carriers across three global alliances — click any logo to view the partnership at a glance."
+          title={t('partners.title')}
+          accent={t('partners.titleAccent')}
+          description={t('partners.description')}
         />
 
         {/* Alliance filter pills */}
@@ -65,7 +67,7 @@ export function Partners() {
                   style={{ backgroundColor: ALLIANCE_COLOR[a] }}
                 />
               )}
-              {a}
+              {a === 'All' ? t('partners.filterAll') : a}
               {a !== 'All' && (
                 <span className="text-brand-muted tabular-nums">
                   {AIRLINES.filter((x) => x.alliance === a).length}
@@ -103,6 +105,7 @@ export function Partners() {
                   src={a.src}
                   alt={a.name}
                   loading="lazy"
+                  decoding="async"
                   className="relative max-h-[52px] max-w-[70%] object-contain grayscale opacity-75 transition-[filter,opacity] duration-500 group-hover:grayscale-0 group-hover:opacity-100"
                 />
                 <div className="relative mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] font-semibold text-brand-muted">
@@ -119,8 +122,8 @@ export function Partners() {
         </div>
 
         <p className="mt-6 text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
-          Showing <span className="text-brand tabular-nums">{filtered.length}</span> of{' '}
-          <span className="tabular-nums">{AIRLINES.length}</span> carriers
+          {t('partners.showing')} <span className="text-brand tabular-nums">{filtered.length}</span> {t('partners.of')}{' '}
+          <span className="tabular-nums">{AIRLINES.length}</span> {t('partners.carriers')}
         </p>
       </div>
 
@@ -135,6 +138,7 @@ export function Partners() {
 }
 
 function AirlineModal({ airline, onClose }: { airline: Airline; onClose: () => void }) {
+  const t = useT()
   const color = ALLIANCE_COLOR[airline.alliance ?? 'Independent']
   return (
     <motion.div
@@ -199,22 +203,19 @@ function AirlineModal({ airline, onClose }: { airline: Airline; onClose: () => v
           </h3>
 
           <dl className="mt-6 space-y-px bg-brand-line border border-brand-line">
-            <Row icon={IconBuildingAirport} label="Hub" value={airline.hub} />
-            <Row icon={IconPlaneTilt} label="Fleet" value={airline.fleet} />
-            <Row icon={IconUsersGroup} label="Alliance" value={airline.alliance ?? 'Independent'} />
+            <Row icon={IconBuildingAirport} label={t('partners.modal.hub')} value={airline.hub} />
+            <Row icon={IconPlaneTilt} label={t('partners.modal.fleet')} value={airline.fleet} />
+            <Row icon={IconUsersGroup} label={t('partners.modal.alliance')} value={airline.alliance ?? 'Independent'} />
           </dl>
 
-          <div className="mt-7 flex items-center justify-between gap-4">
-            <p className="m-0 text-[12px] text-brand-muted">
-              We issue tickets on this carrier through every sales channel we operate.
-            </p>
+          <div className="mt-7 flex items-center justify-end gap-4">
             <a
               href={airline.website}
               target="_blank"
               rel="noreferrer"
               className="shrink-0 inline-flex items-center gap-2 h-10 px-4 bg-brand text-white text-[11px] font-semibold uppercase tracking-[0.18em] rounded-full hover:bg-brand-accent transition-colors"
             >
-              Visit site
+              {t('partners.modal.visit')}
               <IconExternalLink size={14} />
             </a>
           </div>

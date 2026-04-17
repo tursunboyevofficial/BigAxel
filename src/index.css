@@ -24,6 +24,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes bigaxel-arrow-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.animate-arrow-bounce {
+  animation: bigaxel-arrow-bounce 1.6s ease-in-out infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-arrow-bounce { animation: none; }
+}
+
+/* Skip rendering off-screen sections until they are near the viewport.
+   Huge win on long pages — browsers pause layout/paint for hidden blocks. */
+.cv-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1200px;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

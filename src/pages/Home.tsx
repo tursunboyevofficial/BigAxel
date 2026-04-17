@@ -14,15 +14,15 @@ export function Home() {
   return (
     <>
       <Hero />
-      <Reveal><About /></Reveal>
-      <Reveal><Partners /></Reveal>
-      <Reveal><Bento /></Reveal>
-      <Reveal><Team /></Reveal>
-      <Reveal><Stats /></Reveal>
-      <Reveal><CTA /></Reveal>
-      <Reveal><FAQ /></Reveal>
-      <Reveal><Blog /></Reveal>
-      <Reveal><Contact /></Reveal>
+      <Reveal className="cv-section"><About /></Reveal>
+      <Reveal className="cv-section"><Partners /></Reveal>
+      <Reveal className="cv-section"><Bento /></Reveal>
+      <Reveal className="cv-section"><Team /></Reveal>
+      <Reveal className="cv-section"><Stats /></Reveal>
+      <Reveal className="cv-section"><CTA /></Reveal>
+      <Reveal className="cv-section"><FAQ /></Reveal>
+      <Reveal className="cv-section"><Blog /></Reveal>
+      <Reveal className="cv-section"><Contact /></Reveal>
     </>
   )
 }

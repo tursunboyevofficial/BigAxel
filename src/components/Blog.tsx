@@ -2,26 +2,31 @@ import { motion } from 'motion/react'
 import { IconArrowUpRight, IconCalendar } from '@tabler/icons-react'
 import { SectionHeading } from '@/components/Eyebrow'
 import { BLOG } from '@/data/content'
+import { useT } from '@/lib/i18n'
 
 const META_COLORS = ['#3477FF', '#E53D2E', '#70991F']
 const ease = [0.22, 1, 0.36, 1] as const
 
 export function Blog() {
+  const t = useT()
+  const posts = t<{ meta: string; title: string; text: string }[]>('blog.posts')
+  const list = Array.isArray(posts) ? posts : BLOG
   return (
     <section id="blog" className="py-[88px] lg:py-[117px] bg-brand-soft">
       <div className="container mx-auto px-6">
         <SectionHeading
-          eyebrow="Recent Blog"
+          eyebrow={t('blog.eyebrow')}
           number="07"
-          title="Stories, updates, and a bit of culture."
-          accent="culture"
-          description="Moments from the office, community updates, and the occasional reflection on what we're building together."
+          title={t('blog.title')}
+          accent={t('blog.titleAccent')}
+          description={t('blog.description')}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-brand-line border border-brand-line">
-          {BLOG.map((post, i) => {
+          {list.map((post, i) => {
             const color = META_COLORS[i % META_COLORS.length]
-            const [kind, date] = post.meta.split(' . ')
+            const sep = post.meta.includes(' · ') ? ' · ' : ' . '
+            const [kind, date] = post.meta.split(sep)
             return (
               <motion.article
                 key={post.title}
@@ -65,7 +70,7 @@ export function Blog() {
 
                 <div className="mt-auto pt-5 border-t border-brand-line flex items-center justify-between">
                   <span className="text-[11px] uppercase tracking-[0.18em] font-semibold text-brand pb-1 border-b border-brand group-hover:text-brand-accent group-hover:border-brand-accent transition-colors">
-                    Read more
+                    {t('blog.readMore')}
                   </span>
                   <span
                     className="h-9 w-9 rounded-full bg-brand-soft text-brand flex items-center justify-center group-hover:bg-brand group-hover:text-white transition-colors"

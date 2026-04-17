@@ -1,18 +1,19 @@
 import { Eyebrow } from '@/components/Eyebrow'
-
-const FIELDS = [
-  { label: 'Email', value: 'info@wework.uz' },
-  { label: 'Instagram', value: 'wework.group' },
-  { label: 'Location', value: 'Uzbekistan' },
-  { label: 'Social', value: 'Facebook, LinkedIn, Instagram' },
-]
+import { useT } from '@/lib/i18n'
 
 export function Contact() {
+  const t = useT()
+  const FIELDS = [
+    { label: t('contact.fields.emailLabel'), value: t('contact.fields.emailValue') },
+    { label: t('contact.fields.instagramLabel'), value: t('contact.fields.instagramValue') },
+    { label: t('contact.fields.locationLabel'), value: t('contact.fields.locationValue') },
+    { label: t('contact.fields.socialLabel'), value: t('contact.fields.socialValue') },
+  ]
   return (
     <section id="contact" className="py-[88px] lg:py-[117px] bg-brand-soft">
       <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-14 items-start">
         <div>
-          <Eyebrow>Contacts</Eyebrow>
+          <Eyebrow>{t('contact.eyebrow')}</Eyebrow>
           <h2
             className="font-semibold uppercase text-brand m-0 mb-6"
             style={{
@@ -23,14 +24,13 @@ export function Contact() {
               fontWeight: 'normal',
             }}
           >
-            Let's talk
+            {t('contact.title')}
           </h2>
           <p
             className="text-brand-muted m-0 max-w-[480px]"
             style={{ fontSize: 20, lineHeight: '29px', letterSpacing: '-0.2px' }}
           >
-            This draft keeps the visible Big Axel contact style in a more structured Dyninno-like
-            block so it can be inserted into a live page or handed off for further development.
+            {t('contact.description')}
           </p>
         </div>
 

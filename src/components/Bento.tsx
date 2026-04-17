@@ -1,5 +1,6 @@
 import { SectionHeading } from '@/components/Eyebrow'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n'
 
 type Cell = {
   span?: 'normal' | 'wide' | 'full' | 'tall' | 'large'
@@ -26,57 +27,65 @@ const HUE_TEXT: Record<NonNullable<Cell['hue']>, string> = {
   soft: 'text-brand-muted',
 }
 
-const CELLS: Cell[] = [
-  {
-    kind: 'intro',
-    span: 'large',
-    eyebrow: 'Why Choose Us',
-    title: 'High paid job, work-life balance',
-    text: 'A team of professionals passionate about sales and customer success — from Tashkent to 50 countries across travel, finance, entertainment and tech.',
-    cta: 'Instagram',
-    href: 'https://instagram.com/wework.group',
-  },
-  {
-    kind: 'image',
-    span: 'normal',
-    image: 'https://wework.uz/assets/imgs/about/3/1.jpg',
-    eyebrow: 'Who We Are',
-    title: 'Sales experts in airline industry',
-  },
-  {
-    kind: 'metric',
-    span: 'normal',
-    value: '30%',
-    title: 'Women on the team',
-    text: 'We actively support and invest in our female colleagues.',
-    hue: 'red',
-  },
-  {
-    kind: 'metric',
-    span: 'normal',
-    value: '95%',
-    title: 'Grown from day one',
-    text: 'Most of the team started their career here and grew with us.',
-    hue: 'green',
-  },
-  {
-    kind: 'metric',
-    span: 'normal',
-    value: '100%',
-    title: 'Competitive pay',
-    text: 'Transparent salaries aligned with top market benchmarks.',
-    hue: 'teal',
-  },
-  {
-    kind: 'cta',
-    span: 'full',
-    eyebrow: 'Mission',
-    title: 'Innovation, collaboration, and growth',
-    text: "We're passionate about fostering an environment that helps employees achieve their personal and professional goals across 50 countries.",
-    href: '#contact',
-    hue: 'soft',
-  },
-]
+type TFn = (key: string) => string
+type BentoMetric = { title: string; text: string }
+
+function buildCells(t: TFn): Cell[] {
+  const metrics = t('bento.metrics') as unknown as BentoMetric[] | string
+  const metricList: BentoMetric[] = Array.isArray(metrics) ? metrics : []
+  return [
+    {
+      kind: 'intro',
+      span: 'large',
+      eyebrow: t('bento.intro.eyebrow'),
+      title: t('bento.intro.title'),
+      text: t('bento.intro.text'),
+      cta: t('bento.intro.cta'),
+      href: 'https://instagram.com/wework.group',
+    },
+    {
+      kind: 'image',
+      span: 'normal',
+      image: 'https://wework.uz/assets/imgs/about/3/1.jpg',
+      eyebrow: t('bento.image.eyebrow'),
+      title: t('bento.image.title'),
+    },
+    {
+      kind: 'metric',
+      span: 'normal',
+      value: '30%',
+      title: metricList[0]?.title ?? '',
+      text: metricList[0]?.text ?? '',
+      hue: 'red',
+    },
+    {
+      kind: 'metric',
+      span: 'normal',
+      value: '95%',
+      title: metricList[1]?.title ?? '',
+      text: metricList[1]?.text ?? '',
+      hue: 'green',
+    },
+    {
+      kind: 'metric',
+      span: 'normal',
+      value: '100%',
+      title: metricList[2]?.title ?? '',
+      text: metricList[2]?.text ?? '',
+      hue: 'teal',
+    },
+    {
+      kind: 'cta',
+      span: 'full',
+      eyebrow: t('bento.mission.eyebrow'),
+      title: t('bento.mission.title'),
+      text: t('bento.mission.text'),
+      cta: t('bento.mission.cta'),
+      href: '#contact',
+      hue: 'soft',
+    },
+  ]
+}
 
 const SPAN_CLS: Record<NonNullable<Cell['span']>, string> = {
   normal: 'lg:col-span-1 lg:row-span-1',
@@ -87,19 +96,20 @@ const SPAN_CLS: Record<NonNullable<Cell['span']>, string> = {
 }
 
 export function Bento() {
+  const t = useT()
   return (
     <section id="benefits" className="py-[88px] lg:py-[117px]">
       <div className="container mx-auto px-6">
         <SectionHeading
-          eyebrow="About + Why Us"
+          eyebrow={t('bento.eyebrow')}
           number="03"
-          title="Sales experts who put people first."
-          accent="people first"
-          description="The Big Axel story, values and team KPIs — one bento layout, four punchy value statements, one mission."
+          title={t('bento.title')}
+          accent={t('bento.titleAccent')}
+          description={t('bento.description')}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[260px] gap-px bg-brand-line border border-brand-line">
-          {CELLS.map((c, i) => (
+          {buildCells(t).map((c, i) => (
             <BentoCell key={i} cell={c} />
           ))}
         </div>
@@ -178,6 +188,8 @@ function BentoCell({ cell }: { cell: Cell }) {
         <img
           src={cell.image}
           alt={cell.title ?? ''}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
@@ -263,7 +275,7 @@ function BentoCell({ cell }: { cell: Cell }) {
             href={cell.href}
             className="relative inline-flex items-center gap-2.5 h-12 px-6 border border-brand text-brand text-[12px] font-semibold uppercase tracking-[0.18em] rounded-full hover:bg-brand hover:text-white transition-colors shrink-0"
           >
-            Learn more
+            {cell.cta ?? 'Learn more'}
             <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
           </a>
         )}

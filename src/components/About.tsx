@@ -10,33 +10,20 @@ import {
 import { Eyebrow } from '@/components/Eyebrow'
 import { NumberTicker } from '@/components/ui/number-ticker'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const PILLARS = [
-  {
-    icon: IconWorld,
-    title: 'Global reach',
-    text: '50 countries served from 5 offices across Central Asia, South Asia, MENA and Europe.',
-  },
-  {
-    icon: IconPlaneTilt,
-    title: 'Travel first',
-    text: 'Airline ticket consolidation is our craft — built on a decade of carrier relationships.',
-  },
-  {
-    icon: IconBuildingSkyscraper,
-    title: 'Four companies',
-    text: 'SummitStone, Lumovia India, Lumovia Egypt and Bigaxel Tech — one shared operating system.',
-  },
-  {
-    icon: IconBriefcase,
-    title: 'People-first',
-    text: 'Most of our team started here and grew with us. Mentorship is a daily practice, not a policy.',
-  },
-]
-
 export function About() {
+  const t = useT()
+
+  const PILLARS = [
+    { icon: IconWorld, title: t('about.pillars.globalTitle'), text: t('about.pillars.globalText') },
+    { icon: IconPlaneTilt, title: t('about.pillars.travelTitle'), text: t('about.pillars.travelText') },
+    { icon: IconBuildingSkyscraper, title: t('about.pillars.companiesTitle'), text: t('about.pillars.companiesText') },
+    { icon: IconBriefcase, title: t('about.pillars.peopleTitle'), text: t('about.pillars.peopleText') },
+  ]
+
   return (
     <section id="about" className="relative py-[88px] lg:py-[117px] overflow-hidden">
       {/* Dotted grid background */}
@@ -68,10 +55,10 @@ export function About() {
             <span className="absolute -top-1 right-0 h-2 w-px bg-brand-line" />
           </div>
           <div className="flex items-center justify-between gap-x-4 gap-y-2 flex-wrap">
-            <Eyebrow>Who we are</Eyebrow>
+            <Eyebrow>{t('about.eyebrow')}</Eyebrow>
             <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] font-semibold tabular-nums">
               <span className="text-brand">01</span>
-              <span className="text-brand-muted">— Section</span>
+              <span className="text-brand-muted">— {t('about.sectionLabel')}</span>
             </span>
           </div>
         </motion.div>
@@ -92,11 +79,11 @@ export function About() {
                 letterSpacing: '-0.04em',
               }}
             >
-              Sales experts
+              {t('about.titleL1')}
               <br />
-              in the airline
+              {t('about.titleL2')}
               <br />
-              industry<span className="text-brand-accent">.</span>
+              {t('about.titleL3')}<span className="text-brand-accent">.</span>
             </motion.h2>
 
             {/* Accent bar */}
@@ -114,9 +101,7 @@ export function About() {
                 <span className="absolute left-0 top-0 h-5 w-px bg-brand-accent" />
               </span>
               <p className="m-0 text-brand" style={{ fontSize: 18, lineHeight: '28px', letterSpacing: '-0.15px' }}>
-                Big Axel is a network of companies serving travel, finance, entertainment and
-                technology across 50 countries. From our Tashkent headquarters we built a group
-                that puts people before process — and lets that decision compound for a decade.
+                {t('about.description')}
               </p>
             </div>
 
@@ -151,14 +136,14 @@ export function About() {
                 to="/companies"
                 className="inline-flex items-center gap-2.5 h-12 px-7 bg-brand text-white text-[12px] font-semibold uppercase tracking-[0.18em] rounded-full hover:bg-brand-accent transition-colors"
               >
-                Explore our companies
+                {t('about.ctaCompanies')}
                 <IconArrowUpRight size={16} />
               </Link>
               <Link
                 to="/careers/apply"
                 className="text-[12px] uppercase tracking-[0.18em] font-semibold text-brand pb-1 border-b border-brand hover:text-brand-accent hover:border-brand-accent transition-colors"
               >
-                Join the team →
+                {t('about.ctaApply')} →
               </Link>
             </div>
           </div>
@@ -175,6 +160,8 @@ export function About() {
               <img
                 src="https://wework.uz/assets/imgs/about/3/1.jpg"
                 alt="Big Axel team at work"
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
               <div
@@ -187,7 +174,7 @@ export function About() {
               {/* Floating year badge */}
               <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-sm px-4 py-3">
                 <p className="m-0 text-[10px] uppercase tracking-[0.22em] font-semibold text-brand-muted">
-                  Since
+                  {t('about.sinceLabel')}
                 </p>
                 <p className="m-0 mt-1 font-medium text-brand tabular-nums"
                    style={{ fontFamily: '"Metropolis Medium", Arial, sans-serif', fontSize: 32, lineHeight: 1 }}>
@@ -199,19 +186,19 @@ export function About() {
             {/* Floating metrics card */}
             <div className="relative lg:absolute lg:-bottom-10 lg:-left-10 mt-[-40px] lg:mt-0 mx-4 lg:mx-0 bg-white border border-brand-line p-6 lg:p-7 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.3)] w-auto lg:w-[320px] z-10">
               <p className="m-0 text-[11px] uppercase tracking-[0.22em] font-semibold text-brand-accent">
-                In numbers
+                {t('about.metricsLabel')}
               </p>
               <div className="mt-5 grid grid-cols-3 gap-4">
-                <StatBlock value={50} suffix="+" label="Countries" />
-                <StatBlock value={200} suffix="+" label="Team members" />
-                <StatBlock value={10} suffix="y" label="Years" />
+                <StatBlock value={50} suffix="+" label={t('about.metricCountries')} />
+                <StatBlock value={200} suffix="+" label={t('about.metricTeam')} />
+                <StatBlock value={10} suffix="y" label={t('about.metricYears')} />
               </div>
               <div className="mt-5 pt-5 border-t border-brand-line flex items-center justify-between">
                 <span className="text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
-                  Headquartered in
+                  {t('about.hqLabel')}
                 </span>
                 <span className="text-[12px] uppercase tracking-[0.14em] font-semibold text-brand">
-                  Tashkent, UZ
+                  {t('about.hqCity')}
                 </span>
               </div>
             </div>

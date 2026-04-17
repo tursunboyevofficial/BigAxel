@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { BRANCHES } from '@/data/branches'
 import { COMPANIES } from '@/data/companies'
+import { useT } from '@/lib/i18n'
 
 const CURRENT_YEAR = new Date().getFullYear()
 
 export function SiteFooter() {
+  const t = useT()
   return (
     <footer className="bg-brand text-white pt-20 pb-10 mt-24">
       <div className="container mx-auto px-6">
@@ -23,24 +25,24 @@ export function SiteFooter() {
               <span className="text-brand-accent">.</span>
             </p>
             <p className="m-0 mt-5 text-white/60 max-w-[38ch]" style={{ fontSize: 14, lineHeight: '22px' }}>
-              A group of companies in travel, finance, entertainment and technology — serving clients across 50 countries.
+              {t('footer.description')}
             </p>
             <Link
               to="/careers/apply"
               className="mt-7 inline-flex items-center gap-2 h-10 px-5 border border-white/70 text-[11px] uppercase tracking-[0.18em] font-semibold rounded-full hover:bg-white hover:text-brand transition-colors"
             >
-              Apply to join us →
+              {t('footer.ctaApply')}
             </Link>
           </div>
 
-          <FooterCol title="Company">
-            <FooterLink to="/" hash="#about">About</FooterLink>
-            <FooterLink to="/" hash="#team">Team</FooterLink>
-            <FooterLink to="/" hash="#faq">FAQ</FooterLink>
-            <FooterLink to="/" hash="#contact">Contact</FooterLink>
+          <FooterCol title={t('footer.company')}>
+            <FooterLink to="/" hash="#about">{t('nav.about')}</FooterLink>
+            <FooterLink to="/" hash="#team">{t('nav.team')}</FooterLink>
+            <FooterLink to="/" hash="#faq">{t('nav.faq')}</FooterLink>
+            <FooterLink to="/" hash="#contact">{t('footer.contact')}</FooterLink>
           </FooterCol>
 
-          <FooterCol title="Companies">
+          <FooterCol title={t('footer.companies')}>
             {COMPANIES.map((c) => (
               <FooterLink key={c.slug} to={`/companies/${c.slug}`}>
                 {c.name}
@@ -48,7 +50,7 @@ export function SiteFooter() {
             ))}
           </FooterCol>
 
-          <FooterCol title="Branches">
+          <FooterCol title={t('footer.branches')}>
             {BRANCHES.map((b) => (
               <FooterLink key={b.slug} to={`/branches/${b.slug}`}>
                 {b.city}, {b.country}
@@ -59,7 +61,7 @@ export function SiteFooter() {
 
         <div className="pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <p className="m-0 text-[11px] uppercase tracking-[0.18em] text-white/50">
-            © {CURRENT_YEAR} Big Axel Group. All rights reserved.
+            {t('footer.copyright', { year: CURRENT_YEAR })}
           </p>
           <div className="flex items-center gap-6 text-[11px] uppercase tracking-[0.18em] text-white/50">
             <a href="mailto:info@wework.uz" className="hover:text-white transition-colors">

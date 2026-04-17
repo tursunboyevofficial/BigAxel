@@ -1,14 +1,18 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { SectionHeading } from '@/components/Eyebrow'
 import { FAQ as FAQ_DATA } from '@/data/content'
+import { useT } from '@/lib/i18n'
 
 export function FAQ() {
+  const t = useT()
+  const items = t<{ q: string; a: string }[]>('faq.items')
+  const list = Array.isArray(items) ? items : FAQ_DATA
   return (
     <section id="faq" className="py-[88px] lg:py-[117px] bg-brand-soft">
       <div className="container mx-auto px-6">
-        <SectionHeading eyebrow="FAQ" title="Be kind to your mind" />
+        <SectionHeading eyebrow={t('faq.eyebrow')} title={t('faq.title')} />
         <Accordion type="single" collapsible defaultValue="item-0" className="border-t border-brand-line">
-          {FAQ_DATA.map((item, i) => (
+          {list.map((item, i) => (
             <AccordionItem key={i} value={`item-${i}`} className="border-b border-brand-line py-2">
               <AccordionTrigger
                 className="text-left font-semibold uppercase text-brand hover:text-brand-accent hover:no-underline data-[state=open]:text-brand"

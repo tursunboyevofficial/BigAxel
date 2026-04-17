@@ -1,15 +1,15 @@
 import { motion } from 'motion/react'
 import { IconArrowUpRight, IconBriefcase, IconMapPin, IconSparkles } from '@tabler/icons-react'
+import { useT } from '@/lib/i18n'
 
-const PERKS = [
-  { icon: IconBriefcase, label: 'Full-time & hybrid roles' },
-  { icon: IconMapPin, label: 'Tashkent · 50 countries' },
-  { icon: IconSparkles, label: 'Mentorship from day one' },
-]
+const PERK_ICONS = [IconBriefcase, IconMapPin, IconSparkles]
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 export function CTA() {
+  const t = useT()
+  const perks = t<string[]>('cta.perks')
+  const perkList = Array.isArray(perks) ? perks : []
   return (
     <section id="cta" className="py-[88px] lg:py-[117px]">
       <div className="container mx-auto px-6">
@@ -39,17 +39,14 @@ export function CTA() {
             }}
           />
 
-          {/* Animated scan line */}
-          <motion.span
+          {/* Static accent top rail */}
+          <span
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 h-px"
             style={{
               background:
-                'linear-gradient(90deg, transparent 0%, rgba(226,42,38,0.9) 50%, transparent 100%)',
+                'linear-gradient(90deg, transparent 0%, rgba(226,42,38,0.45) 50%, transparent 100%)',
             }}
-            initial={{ x: '-100%' }}
-            animate={{ x: '100%' }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: 'linear', repeatDelay: 0.6 }}
           />
 
           <div className="relative px-6 py-12 sm:px-12 sm:py-16 lg:px-20 lg:py-24 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 sm:gap-14 items-end">
@@ -66,7 +63,7 @@ export function CTA() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-accent" />
                 </span>
-                Now hiring · Join Us
+                {t('cta.eyebrow')}
               </p>
 
               <h2
@@ -78,12 +75,12 @@ export function CTA() {
                   letterSpacing: '-0.04em',
                 }}
               >
-                Let's make
+                {t('cta.titleL1')}
                 <br />
-                something
+                {t('cta.titleL2')}
                 <br />
                 <span className="relative inline-block">
-                  great together
+                  {t('cta.titleL3')}
                   <motion.span
                     aria-hidden
                     className="absolute left-0 right-0 bottom-1 h-[6px] bg-brand-accent/85"
@@ -100,20 +97,22 @@ export function CTA() {
                 className="text-white/70 m-0 mt-8 max-w-[52ch]"
                 style={{ fontSize: 18, lineHeight: '28px', letterSpacing: '-0.15px' }}
               >
-                We're always looking for people who want to build something real — in sales, tech,
-                and travel. Send us your story and let's talk.
+                {t('cta.description')}
               </p>
 
               <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
-                {PERKS.map(({ icon: Icon, label }) => (
-                  <li
-                    key={label}
-                    className="inline-flex items-center gap-2.5 text-white/75 text-[13px] uppercase tracking-[0.14em] font-semibold"
-                  >
-                    <Icon size={16} stroke={1.6} className="text-brand-accent" />
-                    {label}
-                  </li>
-                ))}
+                {perkList.map((label, i) => {
+                  const Icon = PERK_ICONS[i] ?? IconSparkles
+                  return (
+                    <li
+                      key={label}
+                      className="inline-flex items-center gap-2.5 text-white/75 text-[13px] uppercase tracking-[0.14em] font-semibold"
+                    >
+                      <Icon size={16} stroke={1.6} className="text-brand-accent" />
+                      {label}
+                    </li>
+                  )
+                })}
               </ul>
             </motion.div>
 
@@ -142,7 +141,7 @@ export function CTA() {
                 />
 
                 <p className="m-0 mb-2 text-[11px] uppercase tracking-[0.22em] font-semibold text-brand-accent">
-                  Careers
+                  {t('cta.cardEyebrow')}
                 </p>
                 <h3
                   className="m-0 font-semibold uppercase text-brand"
@@ -154,12 +153,12 @@ export function CTA() {
                     fontWeight: 'normal',
                   }}
                 >
-                  Apply now →
+                  {t('cta.cardTitle')}
                 </h3>
 
                 <div className="mt-8 pt-6 border-t border-brand-line flex items-center justify-between">
                   <span className="text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
-                    Takes 2 minutes
+                    {t('cta.takes')}
                   </span>
                   <span className="relative h-11 w-11 rounded-full bg-brand text-white overflow-hidden">
                     <IconArrowUpRight
