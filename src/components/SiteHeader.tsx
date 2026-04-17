@@ -65,19 +65,28 @@ export function SiteHeader() {
   return (
     <motion.header ref={ref} className="fixed inset-x-0 top-0 z-50 w-full">
       <motion.div
-        animate={{
-          width: scrolled ? 'min(1040px, calc(100% - 24px))' : '100%',
-          y: scrolled ? 14 : 0,
-          backdropFilter: scrolled ? 'blur(14px)' : 'none',
-          backgroundColor: scrolled ? 'rgba(255,255,255,0.88)' : dark ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.98)',
+        animate={{ y: scrolled ? 14 : 0 }}
+        transition={{ type: 'spring', stiffness: 220, damping: 28 }}
+        style={{
+          maxWidth: scrolled ? 1040 : '100%',
+          backgroundColor: scrolled
+            ? 'rgba(255,255,255,0.88)'
+            : dark
+              ? 'rgba(255,255,255,0)'
+              : 'rgba(255,255,255,0.98)',
           borderRadius: scrolled ? 999 : 0,
           boxShadow: scrolled
             ? '0 6px 30px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.6) inset'
             : 'none',
+          backdropFilter: scrolled ? 'blur(8px) saturate(1.4)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(8px) saturate(1.4)' : 'none',
+          transition:
+            'max-width 300ms cubic-bezier(0.22, 1, 0.36, 1), background-color 200ms ease, border-radius 300ms ease, box-shadow 300ms ease',
+          willChange: 'max-width, background-color',
         }}
-        transition={{ type: 'spring', stiffness: 200, damping: 28 }}
         className={cn(
           'mx-auto h-16 flex items-center justify-between gap-6 px-5 lg:px-6',
+          scrolled ? 'mx-3' : '',
           !scrolled && dark && 'border-b border-white/30',
           !scrolled && !dark && 'border-b border-brand-line'
         )}
