@@ -2,6 +2,7 @@
   font-family: 'Metropolis Regular';
   font-style: normal;
   font-weight: normal;
+  font-display: swap;
   src: local('Metropolis Regular'),
        url('https://dyninno.com/wp-content/themes/dyninno/assets/fonts/Metropolis-Regular.woff') format('woff');
 }
@@ -9,6 +10,7 @@
   font-family: 'Metropolis Medium';
   font-style: normal;
   font-weight: normal;
+  font-display: swap;
   src: local('Metropolis Medium'),
        url('https://dyninno.com/wp-content/themes/dyninno/assets/fonts/Metropolis-Medium.woff') format('woff');
 }
@@ -16,6 +18,7 @@
   font-family: 'Metropolis Semi Bold';
   font-style: normal;
   font-weight: normal;
+  font-display: swap;
   src: local('Metropolis Semi Bold'),
        url('https://dyninno.com/wp-content/themes/dyninno/assets/fonts/Metropolis-SemiBold.woff') format('woff');
 }

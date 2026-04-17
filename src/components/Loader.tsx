@@ -2,21 +2,38 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 
 const ease = [0.22, 1, 0.36, 1] as const
-const DURATION = 1400
+const DURATION = 900
+const STORAGE_KEY = 'bigaxel:loader-seen:v1'
 
 const LETTERS = ['B', 'i', 'g', ' ', 'A', 'x', 'e', 'l']
 
+function hasSeenThisSession(): boolean {
+  try {
+    return sessionStorage.getItem(STORAGE_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
 export function Loader() {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(() => !hasSeenThisSession())
 
   useEffect(() => {
-    const id = window.setTimeout(() => setVisible(false), DURATION)
+    if (!visible) return
+    const id = window.setTimeout(() => {
+      setVisible(false)
+      try {
+        sessionStorage.setItem(STORAGE_KEY, '1')
+      } catch {
+        /* ignore */
+      }
+    }, DURATION)
     document.body.style.overflow = 'hidden'
     return () => {
       window.clearTimeout(id)
       document.body.style.overflow = ''
     }
-  }, [])
+  }, [visible])
 
   useEffect(() => {
     if (!visible) document.body.style.overflow = ''
