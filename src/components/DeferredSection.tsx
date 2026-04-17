@@ -67,7 +67,7 @@ export function DeferredSection({
   }, [show, rootMargin, idleFallbackMs])
 
   return (
-    <div ref={ref} className="cv-section" style={show ? undefined : { minHeight }}>
+    <div ref={ref} style={show ? undefined : { minHeight }}>
       <Suspense fallback={<div style={{ minHeight }} />}>
         {show ? children : null}
       </Suspense>

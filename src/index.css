@@ -39,11 +39,13 @@
   .animate-arrow-bounce { animation: none; }
 }
 
-/* Skip rendering off-screen sections until they are near the viewport.
-   Huge win on long pages — browsers pause layout/paint for hidden blocks. */
+/* Previously used content-visibility: auto for skip-render, but it caused
+   a thrash on scroll-up: every section re-enters viewport and re-paints
+   its heavy CSS backgrounds (dotted grids, radial masks). Lazy-loading
+   via DeferredSection already avoids the initial cost, and once a
+   section is painted its layer is cached by the compositor. */
 .cv-section {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 1200px;
+  contain: layout paint;
 }
 
 @layer base {
