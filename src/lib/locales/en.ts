@@ -278,4 +278,135 @@ export const en = {
     close: 'Close',
     loading: 'Loading…',
   },
+  branches: {
+    back: 'Back',
+    estShort: 'Est.',
+    stats: {
+      established: 'Established',
+      teamSize: 'Team size',
+      country: 'Country',
+      companies: 'Companies',
+    },
+    focusEyebrow: 'What we do here',
+    focusTitle: 'Focus areas',
+    focusDescription:
+      'Every branch runs a specific mix of services — shaped by local talent, time zones and the markets it serves.',
+    basedEyebrow: 'Based here',
+    basedTitle: 'Companies at {{city}}',
+    otherTitle: 'Other branches',
+    viewCompany: 'View company',
+    fillTitle: 'New office',
+    fillSubtitle: 'Growing the map — more locations in the pipeline.',
+    countries: {
+      Uzbekistan: 'Uzbekistan',
+      India: 'India',
+      Egypt: 'Egypt',
+      Latvia: 'Latvia',
+    },
+    items: {
+      tashkent: {
+        tagline: 'Headquarters',
+        description:
+          'Our flagship office in Tashkent opened in 2014 and remains the operational heart of Big Axel Group. Home to our largest sales floor, executive team, and a multilingual support desk serving clients across Central Asia and the Middle East.',
+        focus: ['Airline ticketing', 'Corporate travel', 'Tech & back office', 'Executive operations'],
+      },
+      namangan: {
+        tagline: 'Regional hub',
+        description:
+          'The Namangan office is our second Uzbek location, focused on regional sales, bilingual customer support, and training new agents. It plays a key role in reaching clients across the Fergana Valley and neighbouring markets.',
+        focus: ['Regional sales', 'Customer support', 'Agent training'],
+      },
+      delhi: {
+        tagline: 'South Asia gateway',
+        description:
+          'Our Delhi team is the engine behind Lumovia India, running large-scale airline ticket consolidation, night shifts for transatlantic markets, and multilingual customer care across the subcontinent.',
+        focus: ['Ticket consolidation', 'Night-shift operations', '24/7 care'],
+      },
+      egypt: {
+        tagline: 'MENA operations',
+        description:
+          'From Cairo we service the Middle East and North Africa region. Lumovia Egypt handles Arabic-speaking markets, outbound leisure sales, and growing partnerships with regional carriers.',
+        focus: ['MENA leisure sales', 'Arabic support', 'Carrier partnerships'],
+      },
+      riga: {
+        tagline: 'European desk',
+        description:
+          'Our Riga presence connects Big Axel to the European travel corridor. The team handles EU-facing clients, Schengen ticketing, and coordinates with European airline partners across the Baltics and beyond.',
+        focus: ['EU clients', 'Schengen ticketing', 'European carriers'],
+      },
+    },
+  },
+  companies: {
+    back: 'Back',
+    indexEyebrow: 'Group of companies',
+    indexTitleL1: 'Four companies,',
+    indexTitleL2: 'one playbook.',
+    indexDescription:
+      'Big Axel is a family of specialised businesses — each with its own focus, but sharing the same operating standards, people-first culture, and global reach.',
+    whatWeDoEyebrow: 'What we do',
+    servicesTitle: 'Services',
+    servicesDescription:
+      'Every service runs on the same operating system: experienced people, transparent processes, and tooling built in-house.',
+    footprintEyebrow: 'Footprint',
+    footprintTitle: 'Where {{name}} operates',
+    otherTitle: 'Other companies',
+    viewAll: 'View all',
+    fillServicesTitle: 'More on the way',
+    fillServicesSubtitle: '{{name}} keeps expanding its service set.',
+    fillBranchTitle: 'New market',
+    fillBranchSubtitle: '{{name}} is expanding — more branches soon.',
+    items: {
+      summitstone: {
+        tagline: 'Airline ticket consolidation',
+        sector: 'Travel · Ticketing',
+        description:
+          'SummitStone is the group flagship — a full-service airline ticket consolidation business serving agencies, tour operators and corporate clients across Central Asia, Europe and the Middle East. We combine long-standing carrier relationships with a modern, people-first sales floor.',
+        services: [
+          { title: 'Ticket consolidation', text: 'Competitive net fares on 60+ carriers with real-time quoting.' },
+          { title: 'Corporate travel', text: 'Dedicated account managers, 24/7 reissue support and reporting.' },
+          { title: 'Group & charter', text: 'Large-group bookings, block space and charter programmes.' },
+          { title: 'Agent portal', text: 'Self-service booking platform for partner agencies.' },
+        ],
+        statLabels: ['Airlines', 'Agent support', 'Years operating'],
+      },
+      'lumovia-india': {
+        tagline: 'South Asia travel operations',
+        sector: 'Travel · Back office',
+        description:
+          'Lumovia India runs night-shift and subcontinent-facing operations from Delhi NCR: ticket issuance, queue management, schedule changes and multilingual customer care. It pairs South Asian talent with European operating hours to deliver round-the-clock service.',
+        services: [
+          { title: 'Night-shift operations', text: 'Coverage for European and Americas clients during off-hours.' },
+          { title: 'Ticket issuance', text: 'GDS-certified ticketers issuing across Amadeus, Sabre and Galileo.' },
+          { title: 'Queue handling', text: 'Schedule changes, reissues and refunds handled inside SLAs.' },
+          { title: 'Customer care', text: 'English and Hindi-speaking agents, voice and chat.' },
+        ],
+        statLabels: ['Agents', 'Global GDS', 'Coverage'],
+      },
+      'lumovia-egypt': {
+        tagline: 'MENA sales & support',
+        sector: 'Travel · MENA',
+        description:
+          'Lumovia Egypt is our gateway to Arabic-speaking markets. From New Cairo, the team drives outbound leisure sales, services regional tour operators, and builds partnerships with Middle Eastern and North African carriers.',
+        services: [
+          { title: 'MENA leisure sales', text: 'Outbound holiday packages and city breaks for Arabic markets.' },
+          { title: 'Arabic-first support', text: 'Native Arabic agents for pre- and post-sale customer care.' },
+          { title: 'Regional partnerships', text: 'Direct relationships with MENA-based airlines and DMCs.' },
+        ],
+        statLabels: ['Team members', 'Languages', 'Founded'],
+      },
+      'bigaxel-tech': {
+        tagline: 'Product & engineering',
+        sector: 'Technology',
+        description:
+          'Bigaxel Tech is the in-house product and engineering team powering the rest of the group. We build the internal booking platform, agent tools, data pipelines and customer-facing web experiences — so the people side of the business can move faster.',
+        services: [
+          { title: 'Booking platform', text: 'Core system used daily by every agent in the group.' },
+          { title: 'Agent tooling', text: 'Internal CRM, reporting dashboards and ticket-desk automations.' },
+          { title: 'Data & analytics', text: 'Pipelines, BI and revenue analytics for executive decisions.' },
+          { title: 'Web presence', text: 'Corporate and partner-facing web products, including this site.' },
+        ],
+        statLabels: ['Engineers', 'Products', 'In-house'],
+      },
+    },
+  },
 } as const

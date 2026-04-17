@@ -86,7 +86,6 @@ export function SiteHeader() {
         }}
         className={cn(
           'mx-auto h-16 flex items-center justify-between gap-6 px-5 lg:px-6',
-          scrolled ? 'mx-3' : '',
           !scrolled && dark && 'border-b border-white/30',
           !scrolled && !dark && 'border-b border-brand-line'
         )}

@@ -280,4 +280,135 @@ export const uz: typeof en = {
     close: 'Yopish',
     loading: 'Yuklanmoqda…',
   },
+  branches: {
+    back: 'Ortga',
+    estShort: '',
+    stats: {
+      established: 'Tashkil etilgan',
+      teamSize: 'Jamoa hajmi',
+      country: 'Davlat',
+      companies: 'Kompaniyalar',
+    },
+    focusEyebrow: 'Biz nima qilamiz',
+    focusTitle: 'Asosiy yoʻnalishlar',
+    focusDescription:
+      'Har bir filial oʻziga xos xizmatlar toʻplamini ishga tushiradi — mahalliy kadrlar, vaqt mintaqalari va bozor talablariga moslashgan.',
+    basedEyebrow: 'Shu yerda joylashgan',
+    basedTitle: '{{city}}dagi kompaniyalar',
+    otherTitle: 'Boshqa filiallar',
+    viewCompany: 'Kompaniyani koʻrish',
+    fillTitle: 'Yangi ofis',
+    fillSubtitle: 'Xaritani kengaytirmoqdamiz — yangi joylar yoʻlda.',
+    countries: {
+      Uzbekistan: 'Oʻzbekiston',
+      India: 'Hindiston',
+      Egypt: 'Misr',
+      Latvia: 'Latviya',
+    },
+    items: {
+      tashkent: {
+        tagline: 'Bosh ofis',
+        description:
+          'Toshkentdagi bosh ofisimiz 2014-yilda ochilgan va Big Axel Group faoliyatining yuragi hisoblanadi. Bu yerda bizning eng katta savdo boʻlimi, boshqaruv jamoasi hamda Markaziy Osiyo va Yaqin Sharqdagi mijozlarga xizmat koʻrsatuvchi koʻp tilli yordam markazi joylashgan.',
+        focus: ['Aviachipta sotuvi', 'Korporativ sayohat', 'Texnika va back-office', 'Boshqaruv operatsiyalari'],
+      },
+      namangan: {
+        tagline: 'Mintaqaviy markaz',
+        description:
+          'Namangan ofisi bizning ikkinchi Oʻzbekistondagi nuqtamiz — mintaqaviy savdo, ikki tilli mijoz xizmati va yangi agentlarni oʻqitishga qaratilgan. Fargʻona vodiysi va qoʻshni bozorlardagi mijozlarga yetib borishda muhim oʻrin tutadi.',
+        focus: ['Mintaqaviy savdo', 'Mijozlar xizmati', 'Agentlarni oʻqitish'],
+      },
+      delhi: {
+        tagline: 'Janubiy Osiyo darvozasi',
+        description:
+          'Dehli jamoamiz Lumovia India ning harakatlantiruvchi kuchi — keng miqyosdagi aviachipta konsolidatsiyasi, transatlantik bozorlar uchun tungi smenalar va butun Hind yarim oroli boʻylab koʻp tilli mijoz yordamini yuritadi.',
+        focus: ['Chipta konsolidatsiyasi', 'Tungi smena operatsiyalari', '24/7 mijoz yordami'],
+      },
+      egypt: {
+        tagline: 'MENA operatsiyalari',
+        description:
+          'Qohiradan Yaqin Sharq va Shimoliy Afrika mintaqasiga xizmat koʻrsatamiz. Lumovia Egypt arab tilida soʻzlashuvchi bozorlar, chiquvchi turistik sotuvlar va mintaqaviy aviakompaniyalar bilan hamkorlikni rivojlantiradi.',
+        focus: ['MENA turistik savdosi', 'Arab tilidagi yordam', 'Tashuvchi hamkorlar'],
+      },
+      riga: {
+        tagline: 'Yevropa stoli',
+        description:
+          'Rigadagi mavjudligimiz Big Axelni Yevropa sayohat koridori bilan bogʻlaydi. Jamoa Yevropa mijozlari bilan ishlaydi, Shengen chiptalarini chiqaradi va Boltiqboʻyi hamda uning atrofidagi Yevropa aviakompaniyalari bilan muvofiqlashadi.',
+        focus: ['Yevropa mijozlari', 'Shengen chiptalari', 'Yevropa tashuvchilari'],
+      },
+    },
+  },
+  companies: {
+    back: 'Ortga',
+    indexEyebrow: 'Kompaniyalar guruhi',
+    indexTitleL1: 'Toʻrtta kompaniya,',
+    indexTitleL2: 'bitta yoʻnalish.',
+    indexDescription:
+      'Big Axel — maxsus faoliyatga ega kompaniyalar oilasi. Har biri oʻz yoʻnalishiga ega, biroq bir xil operatsion standartlar, odamni birinchi qoʻyuvchi madaniyat va global qamrovni boʻlishadi.',
+    whatWeDoEyebrow: 'Biz nima qilamiz',
+    servicesTitle: 'Xizmatlar',
+    servicesDescription:
+      'Har bir xizmat bitta operatsion tizimda ishlaydi: tajribali odamlar, shaffof jarayonlar va ichki ishlab chiqilgan uskunalar.',
+    footprintEyebrow: 'Faoliyat xaritasi',
+    footprintTitle: '{{name}} qayerda ishlaydi',
+    otherTitle: 'Boshqa kompaniyalar',
+    viewAll: 'Hammasini koʻrish',
+    fillServicesTitle: 'Yaqin orada',
+    fillServicesSubtitle: '{{name}} xizmatlar toʻplamini kengaytirishda davom etmoqda.',
+    fillBranchTitle: 'Yangi bozor',
+    fillBranchSubtitle: '{{name}} kengaymoqda — yangi filiallar yoʻlda.',
+    items: {
+      summitstone: {
+        tagline: 'Aviachipta konsolidatsiyasi',
+        sector: 'Sayohat · Chipta sotuvi',
+        description:
+          'SummitStone — guruhning bosh kompaniyasi. Markaziy Osiyo, Yevropa va Yaqin Sharqdagi agentliklar, turoperatorlar va korporativ mijozlarga toʻliq xizmat koʻrsatuvchi aviachipta konsolidatori. Biz koʻp yillik aviakompaniya hamkorligini zamonaviy, odamni ardoqlaydigan savdo boʻlimi bilan birlashtiramiz.',
+        services: [
+          { title: 'Chipta konsolidatsiyasi', text: '60+ tashuvchida raqobatbardosh net-tariflar, real vaqtdagi narx berish.' },
+          { title: 'Korporativ sayohat', text: 'Shaxsiy akkaunt menejerlari, 24/7 qayta chiqarish va hisobotlar.' },
+          { title: 'Guruh va charter', text: 'Katta guruh bronlari, blok-space va charter dasturlari.' },
+          { title: 'Agent portali', text: 'Hamkor agentliklar uchun oʻz-oʻzidan xizmat koʻrsatuvchi bron tizimi.' },
+        ],
+        statLabels: ['Aviakompaniya', 'Agent yordami', 'Yillik faoliyat'],
+      },
+      'lumovia-india': {
+        tagline: 'Janubiy Osiyo sayohat operatsiyalari',
+        sector: 'Sayohat · Back-office',
+        description:
+          'Lumovia India Dehli NCR da tungi smena va Hind yarim oroli bozorlariga qaratilgan operatsiyalarni boshqaradi: chipta chiqarish, navbatni boshqarish, jadval oʻzgarishlari va koʻp tilli mijoz yordami. Janubiy Osiyo iste\'dodini Yevropa ish soatlari bilan birlashtirib, 24 soatlik xizmat taqdim etadi.',
+        services: [
+          { title: 'Tungi smena operatsiyalari', text: 'Ish vaqtidan tashqari Yevropa va Amerika mijozlari uchun qamrov.' },
+          { title: 'Chipta chiqarish', text: 'Amadeus, Sabre va Galileo boʻyicha sertifikatlangan ticketing.' },
+          { title: 'Navbatni boshqarish', text: 'SLA ichida jadval oʻzgarishlari, qayta chiqarish va qaytarish.' },
+          { title: 'Mijoz xizmati', text: 'Ingliz va hind tillarida, ovoz va chat orqali xizmat.' },
+        ],
+        statLabels: ['Agent', 'Global GDS', 'Qamrov'],
+      },
+      'lumovia-egypt': {
+        tagline: 'MENA savdo va yordam',
+        sector: 'Sayohat · MENA',
+        description:
+          'Lumovia Egypt — arab tilidagi bozorlarga kirishimiz darvozasi. Yangi Qohiradan jamoa chiquvchi turistik sotuvlarni olib boradi, mintaqaviy turoperatorlarga xizmat koʻrsatadi va Yaqin Sharq hamda Shimoliy Afrika aviakompaniyalari bilan hamkorlikni kengaytiradi.',
+        services: [
+          { title: 'MENA turistik savdosi', text: 'Arab bozorlari uchun chiquvchi dam olish paketlari va shahar turlari.' },
+          { title: 'Arabcha avvalidan yordam', text: 'Sotuv oldi va keyin uchun mahalliy arab tilida soʻzlashuvchi agentlar.' },
+          { title: 'Mintaqaviy hamkorlik', text: 'MENA asosidagi aviakompaniyalar va DMC bilan toʻgʻridan-toʻgʻri aloqalar.' },
+        ],
+        statLabels: ['Jamoa', 'Til', 'Tashkil etilgan'],
+      },
+      'bigaxel-tech': {
+        tagline: 'Mahsulot va injiniring',
+        sector: 'Texnologiya',
+        description:
+          'Bigaxel Tech — guruhning ichki mahsulot va injiniring jamoasi. Biz ichki bron platformasi, agent vositalari, maʼlumot quvurlari va mijozlarga moʻljallangan veb-tajribalarni yaratamiz — shunday qilib biznesning odamlar tomoni tezroq harakat qiladi.',
+        services: [
+          { title: 'Bron platformasi', text: 'Guruhdagi har bir agent tomonidan har kuni ishlatiladigan asosiy tizim.' },
+          { title: 'Agent vositalari', text: 'Ichki CRM, hisobot dashbordlari va ticket-desk avtomatizatsiyalari.' },
+          { title: 'Maʼlumot va tahlil', text: 'Quvurlar, BI va boshqaruv qarorlari uchun daromad tahlili.' },
+          { title: 'Veb-mavjudlik', text: 'Korporativ va hamkorlik veb-mahsulotlari, shu jumladan ushbu sayt.' },
+        ],
+        statLabels: ['Muhandis', 'Mahsulot', 'Ichki'],
+      },
+    },
+  },
 }
