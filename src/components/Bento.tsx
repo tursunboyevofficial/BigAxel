@@ -1,4 +1,4 @@
-import { Eyebrow } from '@/components/Eyebrow'
+import { SectionHeading } from '@/components/Eyebrow'
 import { cn } from '@/lib/utils'
 
 type Cell = {
@@ -90,30 +90,13 @@ export function Bento() {
   return (
     <section id="benefits" className="py-[88px] lg:py-[117px]">
       <div className="container mx-auto px-6">
-        <div className="max-w-[1000px] mb-12 pt-7 border-t border-brand-line grid grid-cols-1 lg:grid-cols-2 gap-7 items-start">
-          <div className="lg:col-span-2">
-            <Eyebrow>About + Why Us</Eyebrow>
-          </div>
-          <h2
-            className="font-semibold uppercase text-brand m-0"
-            style={{
-              fontFamily: '"Metropolis Semi Bold", Arial, sans-serif',
-              fontSize: 'clamp(2rem, 5.2vw, 64px)',
-              lineHeight: 0.94,
-              letterSpacing: '-0.035em',
-              fontWeight: 'normal',
-            }}
-          >
-            Sales experts who put people first
-          </h2>
-          <p
-            className="text-brand-muted m-0 max-w-[560px]"
-            style={{ fontSize: 20, lineHeight: '29px', letterSpacing: '-0.2px' }}
-          >
-            The Big Axel story, values and team KPIs — one bento layout, four
-            punchy value statements, one mission.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="About + Why Us"
+          number="03"
+          title="Sales experts who put people first."
+          accent="people first"
+          description="The Big Axel story, values and team KPIs — one bento layout, four punchy value statements, one mission."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[260px] gap-px bg-brand-line border border-brand-line">
           {CELLS.map((c, i) => (

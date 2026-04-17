@@ -1,72 +1,245 @@
-import { Eyebrow } from '@/components/Eyebrow'
-import { BlurredInfiniteSlider } from '@/components/ui/blurred-infinite-slider'
-import { AIRLINES } from '@/data/content'
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import { IconBuildingAirport, IconExternalLink, IconPlaneTilt, IconUsersGroup, IconX } from '@tabler/icons-react'
+import { SectionHeading } from '@/components/Eyebrow'
+import { AIRLINES, type Airline } from '@/data/content'
+import { cn } from '@/lib/utils'
+
+const ALLIANCES = ['All', 'Star Alliance', 'SkyTeam', 'Oneworld', 'Independent'] as const
+type AllianceFilter = (typeof ALLIANCES)[number]
+
+const ALLIANCE_COLOR: Record<string, string> = {
+  'Star Alliance': '#3477FF',
+  SkyTeam: '#009A66',
+  Oneworld: '#E53D2E',
+  Independent: '#777A80',
+}
+
+const ease = [0.22, 1, 0.36, 1] as const
 
 export function Partners() {
+  const [filter, setFilter] = useState<AllianceFilter>('All')
+  const [selected, setSelected] = useState<Airline | null>(null)
+
+  const filtered = filter === 'All' ? AIRLINES : AIRLINES.filter((a) => a.alliance === filter)
+
+  useEffect(() => {
+    if (!selected) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setSelected(null)
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [selected])
+
   return (
-    <section
-      id="partners"
-      className="py-[88px] lg:py-[117px] bg-brand-soft overflow-hidden"
-    >
+    <section id="partners" className="relative py-[88px] lg:py-[117px] bg-brand-soft overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="max-w-[1000px] mb-14 pt-7 border-t border-brand-line grid grid-cols-1 lg:grid-cols-2 gap-7 items-start">
-          <div className="lg:col-span-2">
-            <Eyebrow>Partners</Eyebrow>
-          </div>
-          <h2
-            className="font-semibold uppercase text-brand m-0"
+        <SectionHeading
+          eyebrow="Airline partners"
+          number="02"
+          title="We work with the world's largest airlines."
+          accent="largest"
+          description="16 carriers across three global alliances — click any logo to view the partnership at a glance."
+        />
+
+        {/* Alliance filter pills */}
+        <div className="mb-10 flex flex-wrap items-center gap-2">
+          {ALLIANCES.map((a) => (
+            <button
+              key={a}
+              type="button"
+              onClick={() => setFilter(a)}
+              className={cn(
+                'inline-flex items-center gap-2 h-9 px-4 text-[11px] uppercase tracking-[0.18em] font-semibold rounded-full border transition-colors',
+                filter === a
+                  ? 'bg-brand text-white border-brand'
+                  : 'bg-white text-brand border-brand-line hover:border-brand'
+              )}
+            >
+              {a !== 'All' && (
+                <span
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{ backgroundColor: ALLIANCE_COLOR[a] }}
+                />
+              )}
+              {a}
+              {a !== 'All' && (
+                <span className="text-brand-muted tabular-nums">
+                  {AIRLINES.filter((x) => x.alliance === a).length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Airline grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-brand-line border border-brand-line">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((a, i) => (
+              <motion.button
+                key={a.code}
+                type="button"
+                onClick={() => setSelected(a)}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3, delay: i * 0.02, ease }}
+                className="group relative bg-white h-[138px] flex flex-col items-center justify-center p-5 hover:bg-white text-left"
+              >
+                <div
+                  aria-hidden
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: `radial-gradient(ellipse 80% 70% at 50% 50%, ${
+                      ALLIANCE_COLOR[a.alliance ?? 'Independent']
+                    }15 0%, transparent 70%)`,
+                  }}
+                />
+                <img
+                  src={a.src}
+                  alt={a.name}
+                  loading="lazy"
+                  className="relative max-h-[52px] max-w-[70%] object-contain grayscale opacity-75 transition-[filter,opacity] duration-500 group-hover:grayscale-0 group-hover:opacity-100"
+                />
+                <div className="relative mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] font-semibold text-brand-muted">
+                  <span className="tabular-nums">{a.code}</span>
+                  <span
+                    className="h-1 w-1 rounded-full"
+                    style={{ backgroundColor: ALLIANCE_COLOR[a.alliance ?? 'Independent'] }}
+                  />
+                  <span className="truncate">{a.alliance === 'Independent' ? 'Indie' : a.alliance?.split(' ')[0]}</span>
+                </div>
+              </motion.button>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        <p className="mt-6 text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
+          Showing <span className="text-brand tabular-nums">{filtered.length}</span> of{' '}
+          <span className="tabular-nums">{AIRLINES.length}</span> carriers
+        </p>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {selected && (
+          <AirlineModal airline={selected} onClose={() => setSelected(null)} />
+        )}
+      </AnimatePresence>
+    </section>
+  )
+}
+
+function AirlineModal({ airline, onClose }: { airline: Airline; onClose: () => void }) {
+  const color = ALLIANCE_COLOR[airline.alliance ?? 'Independent']
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+    >
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden
+      />
+      <motion.div
+        role="dialog"
+        aria-modal
+        aria-label={`${airline.name} partnership details`}
+        initial={{ opacity: 0, scale: 0.95, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 16 }}
+        transition={{ duration: 0.3, ease }}
+        className="relative bg-white w-full max-w-lg shadow-2xl"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-4 right-4 h-9 w-9 rounded-full bg-brand-soft text-brand flex items-center justify-center hover:bg-brand hover:text-white transition-colors"
+        >
+          <IconX size={16} />
+        </button>
+
+        <div
+          className="relative h-36 flex items-center justify-center p-6"
+          style={{
+            background: `linear-gradient(135deg, ${color}12 0%, #F7F8FA 60%, ${color}08 100%)`,
+          }}
+        >
+          <img
+            src={airline.src}
+            alt={airline.name}
+            className="max-h-[72px] max-w-[60%] object-contain"
+          />
+        </div>
+
+        <div className="p-7 lg:p-8">
+          <p className="m-0 text-[11px] uppercase tracking-[0.22em] font-semibold" style={{ color }}>
+            {airline.alliance} · {airline.code}
+          </p>
+          <h3
+            className="m-0 mt-3 font-semibold uppercase text-brand"
             style={{
               fontFamily: '"Metropolis Semi Bold", Arial, sans-serif',
-              fontSize: 'clamp(2rem, 5.2vw, 64px)',
-              lineHeight: 0.94,
-              letterSpacing: '-0.035em',
+              fontSize: 28,
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
               fontWeight: 'normal',
             }}
           >
-            We work with global largest airlines
-          </h2>
-          <p
-            className="text-brand-muted m-0 max-w-[560px]"
-            style={{ fontSize: 20, lineHeight: '29px', letterSpacing: '-0.2px' }}
-          >
-            A selection of airline brands that reflects the original Big Axel homepage and keeps
-            the trust-first, enterprise presentation style.
-          </p>
-        </div>
+            {airline.name}
+          </h3>
 
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col items-center md:flex-row">
-            <div className="flex-shrink-0 text-center md:text-right md:max-w-44 md:border-r md:border-brand-line md:pr-6">
-              <p
-                className="text-brand-muted font-semibold uppercase m-0"
-                style={{ fontSize: 12, letterSpacing: '0.2em', lineHeight: '18px' }}
-              >
-                Powering the best teams in the air
-              </p>
-            </div>
+          <dl className="mt-6 space-y-px bg-brand-line border border-brand-line">
+            <Row icon={IconBuildingAirport} label="Hub" value={airline.hub} />
+            <Row icon={IconPlaneTilt} label="Fleet" value={airline.fleet} />
+            <Row icon={IconUsersGroup} label="Alliance" value={airline.alliance ?? 'Independent'} />
+          </dl>
 
-            <div className="w-full py-8 md:w-auto md:flex-1 md:pl-6">
-              <BlurredInfiniteSlider
-                speed={45}
-                speedOnHover={18}
-                gap={88}
-                fadeWidth={96}
-              >
-                {AIRLINES.map((logo) => (
-                  <div key={logo.src} className="flex items-center justify-center h-12">
-                    <img
-                      src={logo.src}
-                      alt={logo.name}
-                      loading="lazy"
-                      className="h-12 w-auto object-contain"
-                    />
-                  </div>
-                ))}
-              </BlurredInfiniteSlider>
-            </div>
+          <div className="mt-7 flex items-center justify-between gap-4">
+            <p className="m-0 text-[12px] text-brand-muted">
+              We issue tickets on this carrier through every sales channel we operate.
+            </p>
+            <a
+              href={airline.website}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0 inline-flex items-center gap-2 h-10 px-4 bg-brand text-white text-[11px] font-semibold uppercase tracking-[0.18em] rounded-full hover:bg-brand-accent transition-colors"
+            >
+              Visit site
+              <IconExternalLink size={14} />
+            </a>
           </div>
         </div>
-      </div>
-    </section>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function Row({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ComponentType<{ size?: number; stroke?: number; className?: string }>
+  label: string
+  value: string
+}) {
+  return (
+    <div className="bg-white flex items-center gap-4 px-4 py-3">
+      <Icon size={16} stroke={1.6} className="text-brand-muted" />
+      <span className="text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-muted flex-1">
+        {label}
+      </span>
+      <span className="text-[13px] text-brand text-right">{value}</span>
+    </div>
   )
 }

@@ -33,11 +33,10 @@ export function Team() {
 
   const total = TEAM.length
   const go = (next: number) => {
-    setDirection(next > active || (active === total - 1 && next === 0) ? 1 : -1)
-    setActive(((next % total) + total) % total)
+    const idx = ((next % total) + total) % total
+    setDirection(idx >= active ? 1 : -1)
+    setActive(idx)
   }
-  const next = () => go(active + 1)
-  const prev = () => go(active - 1)
 
   useEffect(() => {
     if (paused) return
@@ -56,7 +55,9 @@ export function Team() {
       <div className="container mx-auto px-6">
         <SectionHeading
           eyebrow="Testimonials"
-          title="People-first stories, straight from the team"
+          number="04"
+          title="People-first stories, straight from the team."
+          accent="People-first"
           description="Personal reflections from the people who make Big Axel tick — browse each story."
         />
 
@@ -126,16 +127,16 @@ export function Team() {
           </div>
 
           {/* Centered carousel card */}
-          <div className="relative mx-auto w-full max-w-[520px]">
-            <div className="relative bg-white border border-brand-line shadow-[0_30px_80px_-30px_rgba(0,0,0,0.25)] px-7 sm:px-10 pt-9 pb-8 sm:pt-12 sm:pb-9 overflow-hidden min-h-[360px] sm:min-h-[400px] flex flex-col">
-              {/* Accent strip */}
+          <div className="relative mx-auto w-full max-w-[560px]">
+            <div className="relative bg-white border border-brand-line shadow-[0_30px_80px_-30px_rgba(0,0,0,0.25)] px-8 sm:px-12 pt-10 pb-9 sm:pt-14 sm:pb-11 overflow-hidden min-h-[400px] sm:min-h-[440px] flex flex-col">
+              {/* Progress accent bar */}
               <motion.span
                 aria-hidden
                 className="absolute top-0 left-0 h-1"
                 style={{ backgroundColor: accent }}
+                key={`bar-${active}`}
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
-                key={`bar-${active}`}
                 transition={{ duration: 7, ease: 'linear' }}
               />
 
@@ -143,7 +144,7 @@ export function Team() {
                 aria-hidden
                 size={48}
                 stroke={1.2}
-                className="text-brand-line mb-5"
+                className="text-brand-line mb-6"
                 style={{ transform: 'scaleX(-1)' }}
               />
 
@@ -155,46 +156,59 @@ export function Team() {
                     variants={{
                       enter: (dir: number) => ({ opacity: 0, x: dir * 32 }),
                       center: { opacity: 1, x: 0, transition: { duration: 0.5, ease } },
-                      exit: (dir: number) => ({
-                        opacity: 0,
-                        x: -dir * 32,
-                        transition: { duration: 0.3, ease },
-                      }),
+                      exit: (dir: number) => ({ opacity: 0, x: -dir * 32, transition: { duration: 0.3, ease } }),
                     }}
                     initial="enter"
                     animate="center"
                     exit="exit"
                     className="m-0"
                   >
+                    {/* Quote — large serif-weighted display type */}
                     <p
-                      className="m-0 text-brand font-semibold"
+                      className="m-0 text-brand"
                       style={{
-                        fontSize: 'clamp(18px, 1.9vw, 22px)',
-                        lineHeight: 1.55,
-                        letterSpacing: '-0.01em',
-                        fontWeight: 'normal',
+                        fontFamily: '"Metropolis Medium", Arial, sans-serif',
+                        fontSize: 'clamp(20px, 2.2vw, 26px)',
+                        lineHeight: 1.4,
+                        letterSpacing: '-0.015em',
+                        fontWeight: 400,
                       }}
                     >
+                      <span style={{ color: accent, fontWeight: 500 }}>“</span>
                       {current.quote}
+                      <span style={{ color: accent, fontWeight: 500 }}>”</span>
                     </p>
-                    <footer className="mt-8 flex items-center gap-4">
+
+                    {/* Author */}
+                    <footer className="mt-9 flex items-center gap-5">
                       <span
-                        className="inline-block h-px w-10 shrink-0"
-                        style={{ backgroundColor: accent }}
-                      />
-                      <span className="flex flex-col">
+                        className="inline-flex items-center justify-center h-12 w-12 rounded-full text-white font-semibold uppercase shrink-0"
+                        style={{
+                          background: `linear-gradient(135deg, ${accent} 0%, ${accent}cc 100%)`,
+                          fontSize: 16,
+                          letterSpacing: '-0.01em',
+                        }}
+                      >
+                        {current.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .slice(0, 2)
+                          .join('')}
+                      </span>
+                      <span className="flex flex-col min-w-0">
                         <span
-                          className="font-semibold uppercase text-brand"
+                          className="font-medium uppercase text-brand truncate"
                           style={{
-                            fontSize: 17,
-                            letterSpacing: '-0.01em',
-                            fontWeight: 'normal',
+                            fontFamily: '"Metropolis Medium", Arial, sans-serif',
+                            fontSize: 18,
+                            lineHeight: 1.1,
+                            letterSpacing: '-0.015em',
                           }}
                         >
                           {current.name}
                         </span>
                         <span
-                          className="text-[11px] uppercase tracking-[0.22em] font-semibold mt-1"
+                          className="mt-1.5 text-[11px] uppercase tracking-[0.22em] font-semibold"
                           style={{ color: accent }}
                         >
                           {current.role}
@@ -211,25 +225,19 @@ export function Team() {
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  onClick={prev}
+                  onClick={() => go(active - 1)}
                   aria-label="Previous testimonial"
                   className="group h-11 w-11 rounded-full border border-brand-line bg-white flex items-center justify-center transition-colors hover:bg-brand hover:border-brand"
                 >
-                  <IconArrowLeft
-                    size={18}
-                    className="text-brand transition-colors group-hover:text-white"
-                  />
+                  <IconArrowLeft size={18} className="text-brand transition-colors group-hover:text-white" />
                 </button>
                 <button
                   type="button"
-                  onClick={next}
+                  onClick={() => go(active + 1)}
                   aria-label="Next testimonial"
                   className="group h-11 w-11 rounded-full border border-brand-line bg-white flex items-center justify-center transition-colors hover:bg-brand hover:border-brand"
                 >
-                  <IconArrowRight
-                    size={18}
-                    className="text-brand transition-colors group-hover:text-white"
-                  />
+                  <IconArrowRight size={18} className="text-brand transition-colors group-hover:text-white" />
                 </button>
               </div>
 

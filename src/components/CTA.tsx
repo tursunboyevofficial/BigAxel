@@ -52,7 +52,7 @@ export function CTA() {
             transition={{ duration: 4.5, repeat: Infinity, ease: 'linear', repeatDelay: 0.6 }}
           />
 
-          <div className="relative px-8 py-14 sm:px-12 sm:py-16 lg:px-20 lg:py-24 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-14 items-end">
+          <div className="relative px-6 py-12 sm:px-12 sm:py-16 lg:px-20 lg:py-24 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 sm:gap-14 items-end">
             {/* Copy */}
             <motion.div
               initial={{ opacity: 0, y: 18 }}
@@ -127,15 +127,16 @@ export function CTA() {
             >
               <a
                 href="#contact"
-                className="group relative block overflow-hidden rounded-sm bg-white text-brand p-8 sm:p-9 transition-colors hover:bg-brand-soft"
+                className="group relative block overflow-hidden rounded-sm bg-white text-brand p-6 sm:p-9 transition-colors hover:bg-brand-soft"
               >
                 {/* Shimmer on hover */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-[1100ms]"
+                  className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform"
                   style={{
                     background:
                       'linear-gradient(120deg, transparent 0%, rgba(226,42,38,0.18) 50%, transparent 100%)',
+                    transitionDuration: '1100ms',
                     transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
                   }}
                 />
@@ -160,14 +161,14 @@ export function CTA() {
                   <span className="text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
                     Takes 2 minutes
                   </span>
-                  <span className="relative h-11 w-11 rounded-full bg-brand text-white flex items-center justify-center overflow-hidden">
+                  <span className="relative h-11 w-11 rounded-full bg-brand text-white overflow-hidden">
                     <IconArrowUpRight
                       size={20}
-                      className="transition-transform duration-500 group-hover:translate-x-4 group-hover:-translate-y-4"
+                      className="absolute inset-0 m-auto transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5"
                     />
                     <IconArrowUpRight
                       size={20}
-                      className="absolute -translate-x-4 translate-y-4 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0"
+                      className="absolute inset-0 m-auto -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0"
                     />
                   </span>
                 </div>

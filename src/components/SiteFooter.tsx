@@ -1,43 +1,121 @@
-const LINKS = [
-  { href: '#about', label: 'About us' },
-  { href: '#contact', label: 'Contact' },
-  { href: '#blog', label: 'Career' },
-  { href: '#faq', label: 'FAQ' },
-]
+import { Link } from 'react-router-dom'
+import { BRANCHES } from '@/data/branches'
+import { COMPANIES } from '@/data/companies'
+
+const CURRENT_YEAR = new Date().getFullYear()
 
 export function SiteFooter() {
   return (
-    <footer className="bg-brand-soft border-t border-brand-line mt-24 pt-7 pb-16">
+    <footer className="bg-brand text-white pt-20 pb-10 mt-24">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 pt-10">
-          <div className="max-w-md">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 pb-16 border-b border-white/10">
+          <div className="col-span-2 lg:col-span-2">
             <p
-              className="m-0 mb-3 text-brand font-semibold uppercase"
-              style={{ fontSize: 13.1, letterSpacing: '0.1em', fontWeight: 'normal' }}
+              className="m-0 font-medium uppercase"
+              style={{
+                fontFamily: '"Metropolis Medium", Arial, sans-serif',
+                fontSize: 'clamp(1.8rem, 3vw, 36px)',
+                lineHeight: 1,
+                letterSpacing: '-0.03em',
+              }}
             >
-              BIG AXEL GROUP
+              Big Axel
+              <span className="text-brand-accent">.</span>
             </p>
-            <p
-              className="m-0 text-brand-muted"
-              style={{ fontSize: 13.1, lineHeight: '19px', letterSpacing: '0.2px' }}
+            <p className="m-0 mt-5 text-white/60 max-w-[38ch]" style={{ fontSize: 14, lineHeight: '22px' }}>
+              A group of companies in travel, finance, entertainment and technology — serving clients across 50 countries.
+            </p>
+            <Link
+              to="/careers/apply"
+              className="mt-7 inline-flex items-center gap-2 h-10 px-5 border border-white/70 text-[11px] uppercase tracking-[0.18em] font-semibold rounded-full hover:bg-white hover:text-brand transition-colors"
             >
-              We strive to make people's dreams a reality through our daily operations.
-            </p>
+              Apply to join us →
+            </Link>
           </div>
-          <div className="flex flex-wrap gap-7">
-            {LINKS.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-brand font-semibold uppercase transition-colors hover:text-brand-accent"
-                style={{ fontSize: 13.1, lineHeight: '14px' }}
-              >
-                {l.label}
-              </a>
+
+          <FooterCol title="Company">
+            <FooterLink to="/" hash="#about">About</FooterLink>
+            <FooterLink to="/" hash="#team">Team</FooterLink>
+            <FooterLink to="/" hash="#faq">FAQ</FooterLink>
+            <FooterLink to="/" hash="#contact">Contact</FooterLink>
+          </FooterCol>
+
+          <FooterCol title="Companies">
+            {COMPANIES.map((c) => (
+              <FooterLink key={c.slug} to={`/companies/${c.slug}`}>
+                {c.name}
+              </FooterLink>
             ))}
+          </FooterCol>
+
+          <FooterCol title="Branches">
+            {BRANCHES.map((b) => (
+              <FooterLink key={b.slug} to={`/branches/${b.slug}`}>
+                {b.city}, {b.country}
+              </FooterLink>
+            ))}
+          </FooterCol>
+        </div>
+
+        <div className="pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <p className="m-0 text-[11px] uppercase tracking-[0.18em] text-white/50">
+            © {CURRENT_YEAR} Big Axel Group. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6 text-[11px] uppercase tracking-[0.18em] text-white/50">
+            <a href="mailto:info@wework.uz" className="hover:text-white transition-colors">
+              info@wework.uz
+            </a>
+            <a
+              href="https://instagram.com/wework.group"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              Instagram
+            </a>
           </div>
         </div>
       </div>
     </footer>
+  )
+}
+
+function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="m-0 mb-5 text-[11px] uppercase tracking-[0.22em] font-semibold text-white/70">
+        {title}
+      </p>
+      <ul className="m-0 p-0 list-none space-y-2.5">{children}</ul>
+    </div>
+  )
+}
+
+function FooterLink({
+  to,
+  hash,
+  children,
+}: {
+  to: string
+  hash?: string
+  children: React.ReactNode
+}) {
+  const target = to + (hash ?? '')
+  const handleClick = (e: React.MouseEvent) => {
+    if (window.location.pathname === to && hash) {
+      e.preventDefault()
+      document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+  return (
+    <li>
+      <Link
+        to={target}
+        onClick={handleClick}
+        className="text-[13px] text-white/80 hover:text-brand-accent transition-colors"
+      >
+        {children}
+      </Link>
+    </li>
   )
 }
