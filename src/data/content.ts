@@ -80,20 +80,66 @@ export const FAQ = [
   },
 ]
 
-export const BLOG = [
+export type BlogPost = {
+  slug: string
+  meta: string
+  title: string
+  text: string
+  image: string
+  author: string
+  readTime: string
+  content: string[]
+}
+
+export const BLOG: BlogPost[] = [
   {
-    meta: 'Event . 25 December 2023',
+    slug: 'corporate-event-vibes-2023',
+    meta: 'Event · 25 December 2023',
     title: 'Capturing the vibes at the Big Axel Group corporate event',
-    text: 'Event coverage with a stronger premium layout and clearer typographic hierarchy.',
+    text: 'A night with the whole Tashkent floor — recap of the 2023 corporate gathering and what we took away from it.',
+    image:
+      'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fm=webp&fit=crop&w=1600&q=80',
+    author: 'Big Axel Editorial',
+    readTime: '3 min read',
+    content: [
+      'Once a year, we pause the sales floor, lift the dress code, and bring everyone — Tashkent agents, Delhi night-shift team, Riga engineers, Cairo support, Namangan trainers — into one room. The 2023 corporate event was no different. If anything, it felt larger: more offices represented, more languages colliding at the snack table, more quiet agents with surprising karaoke ranges.',
+      'The rhythm of the evening is always the same. Awards first — Agent of the Year, Rookie of the Year, a handful of behind-the-scenes honours for the ops team that keeps the whole machine running. Then dinner. Then the floor opens up and the reserved polite version of the company melts into a real one.',
+      'What struck us most was how fast the group is growing up. Two years ago we did this in a single medium-sized room. In 2023 we outgrew the venue twice over. Departments that used to barely know each other traded contacts. New starters from Gurugram met the Tashkent lead they had only spoken to through Slack.',
+      'A few things we took away: the culture is travelling across offices well; mentorship is happening between cities, not just within them; and the next generation of team leads is already in the room. 2024 calendar is being planned — expect something bigger, with a stronger creative direction and a few surprises we cannot spoil here.',
+      'Thanks to everyone who showed up, to the ops crew who made it happen, and to the year we just closed. Onward to the next one.',
+    ],
   },
   {
-    meta: 'Instagram post . 18 February 2023',
+    slug: 'ready-to-know-us',
+    meta: 'Instagram post · 18 February 2023',
     title: 'Are you ready to be informed about us?',
-    text: 'Short-form company update card with the same editorial energy as the original.',
+    text: 'A short primer on who we are, who we hire, and what we actually do across travel, finance and tech.',
+    image:
+      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fm=webp&fit=crop&w=1600&q=80',
+    author: 'Big Axel Editorial',
+    readTime: '2 min read',
+    content: [
+      'Big Axel Group is a family of companies across travel, finance, entertainment and technology — built from a single sales floor in Tashkent that opened in 2014 and quietly grew into five offices serving clients in fifty countries.',
+      'The core of the business is airline-ticket consolidation. SummitStone, Lumovia India, Lumovia Egypt and Bigaxel Tech together handle the sales, the operations, the late-night ticketing for transatlantic markets, and the software that ties it all together. Around that core we run customer support, marketing, finance and product teams that keep the whole thing scaling.',
+      'People matter more than process here. Most of the team started with us — as new agents, as interns, as first-role engineers — and grew into senior roles. Mentorship is not a policy, it is a daily habit. If you walk the Tashkent floor at 10 AM, you will find a team lead on a call with someone who joined three weeks ago.',
+      'If any of that sounds like a place you would like to work, the /jobs page lists every opening we are actively hiring for — across sales, engineering, HR, finance, marketing and design.',
+    ],
   },
   {
-    meta: 'Instagram post . 5 April 2023',
+    slug: 'success-in-harmony',
+    meta: 'Instagram post · 5 April 2023',
     title: 'Success is in harmony',
-    text: "Used as a content tile to keep the source site's social-post storytelling feel.",
+    text: 'How we think about teamwork across five offices, three companies and roughly a dozen time zones.',
+    image:
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fm=webp&fit=crop&w=1600&q=80',
+    author: 'Big Axel Editorial',
+    readTime: '4 min read',
+    content: [
+      'Travel is an asynchronous business. A booking made in Tashkent is ticketed in Delhi, supported by Cairo overnight, and reported by Riga the next morning. That is a lot of hand-offs, and a lot of opportunities for something to break. What keeps it all in harmony is not the tools — although we love our tools — it is a set of quiet agreements between people.',
+      'The first agreement is about ownership. A ticket that goes wrong has exactly one person responsible for making it right, and that person is the one who touched it last. Nobody throws it over a wall. We have never made this a formal policy; it is simply how everyone started and nobody changed it.',
+      'The second agreement is about speed. We would rather a rough answer in an hour than a polished answer in a day. On the sales floor that is obvious — the client is waiting — but it holds internally too. Decisions are pushed down to the person closest to the problem.',
+      'The third agreement is about patience. New joiners have a six-month ramp. Team leads know it. We do not judge performance in a way that tells someone they are behind in week three of a six-month arc. That single habit has kept turnover low and the bench deep.',
+      'None of this is a framework we invented. It is the culture that emerged from growing slowly and keeping the same people around long enough for habits to stick. If you are reading this and thinking about joining, that is the place you are joining.',
+    ],
   },
 ]

@@ -13,7 +13,7 @@ export const uz = {
   },
   hero: {
     eyebrow: 'Big Axel Group · 2014-dan, Toshkent',
-    titleLine1: 'Sayohat',
+    titleLine1: 'Hashamat',
     titleLine2: "odamlar bilan ",
     titleAccent: 'uchrashadi.',
     description:
@@ -181,6 +181,10 @@ export const uz = {
       },
     ],
     readMore: 'Batafsil oʻqish',
+    backToBlog: 'Blogga qaytish',
+    readNext: 'Keyingi oʻqish',
+    minRead: '{{n}} daqiqa oʻqish',
+    publishedBy: 'Muallif:',
   },
   contact: {
     eyebrow: 'Aloqa',

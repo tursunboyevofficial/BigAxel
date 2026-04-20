@@ -15,6 +15,7 @@ const CompanyDetail = lazy(() => import('@/pages/CompanyDetail').then((m) => ({ 
 const CareersApply = lazy(() => import('@/pages/CareersApply').then((m) => ({ default: m.CareersApply })))
 const JobsIndex = lazy(() => import('@/pages/JobsIndex').then((m) => ({ default: m.JobsIndex })))
 const JobDetail = lazy(() => import('@/pages/JobDetail').then((m) => ({ default: m.JobDetail })))
+const BlogDetail = lazy(() => import('@/pages/BlogDetail').then((m) => ({ default: m.BlogDetail })))
 const NotFound = lazy(() => import('@/pages/NotFound').then((m) => ({ default: m.NotFound })))
 
 const pageEase = [0.22, 1, 0.36, 1] as const
@@ -54,6 +55,7 @@ function AnimatedRoutes() {
             <Route path="/companies/:slug" element={<CompanyDetail />} />
             <Route path="/jobs" element={<JobsIndex />} />
             <Route path="/jobs/:slug" element={<JobDetail />} />
+            <Route path="/blog/:slug" element={<BlogDetail />} />
             <Route path="/careers/apply" element={<CareersApply />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

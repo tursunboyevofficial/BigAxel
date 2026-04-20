@@ -3,11 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { IconBuildingAirport, IconExternalLink, IconPlaneTilt, IconUsersGroup, IconX } from '@tabler/icons-react'
 import { SectionHeading } from '@/components/Eyebrow'
 import { AIRLINES, type Airline } from '@/data/content'
-import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
-
-const ALLIANCES = ['All', 'Star Alliance', 'SkyTeam', 'Oneworld', 'Independent'] as const
-type AllianceFilter = (typeof ALLIANCES)[number]
 
 const ALLIANCE_COLOR: Record<string, string> = {
   'Star Alliance': '#3477FF',
@@ -20,10 +16,7 @@ const ease = [0.22, 1, 0.36, 1] as const
 
 export function Partners() {
   const t = useT()
-  const [filter, setFilter] = useState<AllianceFilter>('All')
   const [selected, setSelected] = useState<Airline | null>(null)
-
-  const filtered = filter === 'All' ? AIRLINES : AIRLINES.filter((a) => a.alliance === filter)
 
   useEffect(() => {
     if (!selected) return
@@ -47,40 +40,10 @@ export function Partners() {
           description={t('partners.description')}
         />
 
-        {/* Alliance filter pills */}
-        <div className="mb-10 flex flex-wrap items-center gap-2">
-          {ALLIANCES.map((a) => (
-            <button
-              key={a}
-              type="button"
-              onClick={() => setFilter(a)}
-              className={cn(
-                'inline-flex items-center gap-2 h-9 px-4 text-[11px] uppercase tracking-[0.18em] font-semibold rounded-full border transition-colors',
-                filter === a
-                  ? 'bg-brand text-white border-brand'
-                  : 'bg-white text-brand border-brand-line hover:border-brand'
-              )}
-            >
-              {a !== 'All' && (
-                <span
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ backgroundColor: ALLIANCE_COLOR[a] }}
-                />
-              )}
-              {a === 'All' ? t('partners.filterAll') : a}
-              {a !== 'All' && (
-                <span className="text-brand-muted tabular-nums">
-                  {AIRLINES.filter((x) => x.alliance === a).length}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-
         {/* Airline grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-brand-line border border-brand-line">
           <AnimatePresence mode="popLayout">
-            {filtered.map((a, i) => (
+            {AIRLINES.map((a, i) => (
               <motion.button
                 key={a.code}
                 type="button"
@@ -90,23 +53,14 @@ export function Partners() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3, delay: i * 0.02, ease }}
-                className="group relative bg-white h-[138px] flex flex-col items-center justify-center p-5 hover:bg-white text-left"
+                className="group relative bg-white h-[138px] flex flex-col items-center justify-center p-5 text-left"
               >
-                <div
-                  aria-hidden
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: `radial-gradient(ellipse 80% 70% at 50% 50%, ${
-                      ALLIANCE_COLOR[a.alliance ?? 'Independent']
-                    }15 0%, transparent 70%)`,
-                  }}
-                />
                 <img
                   src={a.src}
                   alt={a.name}
                   loading="lazy"
                   decoding="async"
-                  className="relative max-h-[52px] max-w-[70%] object-contain grayscale opacity-75 transition-[filter,opacity] duration-500 group-hover:grayscale-0 group-hover:opacity-100"
+                  className="relative max-h-[52px] max-w-[70%] object-contain grayscale opacity-80 transition-[filter,opacity,transform] duration-500 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
                 />
                 <div className="relative mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] font-semibold text-brand-muted">
                   <span className="tabular-nums">{a.code}</span>
@@ -122,8 +76,8 @@ export function Partners() {
         </div>
 
         <p className="mt-6 text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
-          {t('partners.showing')} <span className="text-brand tabular-nums">{filtered.length}</span> {t('partners.of')}{' '}
-          <span className="tabular-nums">{AIRLINES.length}</span> {t('partners.carriers')}
+          {t('partners.showing')} <span className="text-brand tabular-nums">{AIRLINES.length}</span>{' '}
+          {t('partners.carriers')}
         </p>
       </div>
 

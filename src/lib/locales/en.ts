@@ -11,7 +11,7 @@ export const en = {
   },
   hero: {
     eyebrow: 'Big Axel Group · Est. 2014, Tashkent',
-    titleLine1: 'Where travel',
+    titleLine1: 'Where luxury',
     titleLine2: 'meets ',
     titleAccent: 'people.',
     description:
@@ -179,6 +179,10 @@ export const en = {
       },
     ],
     readMore: 'Read more',
+    backToBlog: 'Back to blog',
+    readNext: 'Read next',
+    minRead: '{{n}} min read',
+    publishedBy: 'By',
   },
   contact: {
     eyebrow: 'Contacts',

@@ -13,8 +13,8 @@ export const ru = {
   },
   hero: {
     eyebrow: 'Big Axel Group · Основано в 2014, Ташкент',
-    titleLine1: 'Где путешествия',
-    titleLine2: 'встречают ',
+    titleLine1: 'Где роскошь',
+    titleLine2: 'встречает ',
     titleAccent: 'людей.',
     description:
       'Семья компаний в сферах путешествий, финансов, развлечений и технологий — созданная в Ташкенте и работающая с клиентами в 50 странах.',
@@ -181,6 +181,10 @@ export const ru = {
       },
     ],
     readMore: 'Читать далее',
+    backToBlog: 'Назад к блогу',
+    readNext: 'Читать далее',
+    minRead: 'Чтение {{n}} мин',
+    publishedBy: 'Автор:',
   },
   contact: {
     eyebrow: 'Контакты',
