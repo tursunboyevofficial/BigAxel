@@ -2,9 +2,8 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { IconArrowUpRight, IconMapPin, IconUsers, IconBriefcase } from '@tabler/icons-react'
-import { BRANCHES } from '@/data/branches'
 import { COMPANIES } from '@/data/companies'
-import { JOBS, JOB_TEAMS, JOB_TYPES, type Job } from '@/data/jobs'
+import { JOBS, JOB_TEAMS, JOB_TYPES, getJobLocations, type Job } from '@/data/jobs'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 
@@ -12,24 +11,24 @@ const ease = [0.22, 1, 0.36, 1] as const
 
 type TeamFilter = (typeof JOB_TEAMS)[number] | 'All'
 type TypeFilter = (typeof JOB_TYPES)[number] | 'All'
-type BranchFilter = string | 'All'
+type LocationFilter = string | 'All'
 
 export function JobsIndex() {
   const t = useT()
   const [team, setTeam] = useState<TeamFilter>('All')
   const [type, setType] = useState<TypeFilter>('All')
-  const [branch, setBranch] = useState<BranchFilter>('All')
+  const [location, setLocation] = useState<LocationFilter>('All')
 
   const filtered = useMemo(
     () =>
       JOBS.filter((j) => (team === 'All' || j.team === team))
         .filter((j) => (type === 'All' || j.type === type))
-        .filter((j) => (branch === 'All' || j.branch === branch)),
-    [team, type, branch]
+        .filter((j) => (location === 'All' || j.location === location)),
+    [team, type, location]
   )
 
-  const anyFilter = team !== 'All' || type !== 'All' || branch !== 'All'
-  const branchMap = Object.fromEntries(BRANCHES.map((b) => [b.slug, b]))
+  const anyFilter = team !== 'All' || type !== 'All' || location !== 'All'
+  const locationOptions = useMemo(() => getJobLocations(), [])
 
   return (
     <section className="pt-32 pb-24 lg:pt-44 lg:pb-32 min-h-[80vh]">
@@ -69,13 +68,10 @@ export function JobsIndex() {
           />
           <FilterSelect
             label={t('jobs.filterBranch')}
-            value={branch}
-            onChange={(v) => setBranch(v as BranchFilter)}
-            options={['All', ...BRANCHES.map((b) => b.slug)]}
+            value={location}
+            onChange={(v) => setLocation(v as LocationFilter)}
+            options={['All', ...locationOptions]}
             allLabel={t('jobs.filterAll')}
-            getLabel={(v) =>
-              v === 'All' ? t('jobs.filterAll') : `${branchMap[v]?.city}, ${branchMap[v]?.countryCode}`
-            }
           />
           <FilterSelect
             label={t('jobs.filterType')}
@@ -89,7 +85,7 @@ export function JobsIndex() {
             onClick={() => {
               setTeam('All')
               setType('All')
-              setBranch('All')
+              setLocation('All')
             }}
             disabled={!anyFilter}
             className={cn(
@@ -139,7 +135,6 @@ export function JobsIndex() {
 
 function JobRow({ job, index }: { job: Job; index: number }) {
   const t = useT()
-  const branch = BRANCHES.find((b) => b.slug === job.branch)
   const company = job.company ? COMPANIES.find((c) => c.slug === job.company) : null
 
   return (
@@ -173,24 +168,24 @@ function JobRow({ job, index }: { job: Job; index: number }) {
           </p>
         </div>
 
-        {/* Team + company */}
+        {/* Team + division */}
         <div className="flex flex-col gap-1">
           <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] font-semibold text-brand">
             <IconUsers size={13} stroke={1.6} className="text-brand-muted" />
             {job.team}
           </span>
-          {company && (
+          {(company?.name || job.division) && (
             <span className="text-[11px] uppercase tracking-[0.14em] text-brand-muted">
-              {company.name}
+              {company?.name ?? job.division}
             </span>
           )}
         </div>
 
-        {/* Location */}
+        {/* Location + type */}
         <div className="flex flex-col gap-1">
           <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] font-semibold text-brand">
             <IconMapPin size={13} stroke={1.6} className="text-brand-muted" />
-            {branch?.city ?? job.branch}
+            {job.location}
           </span>
           <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-brand-muted">
             <IconBriefcase size={12} stroke={1.6} />

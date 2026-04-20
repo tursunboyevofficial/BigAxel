@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react'
 import { BRANCHES } from '@/data/branches'
 import { COMPANIES } from '@/data/companies'
-import { getJob, getJobsByBranch } from '@/data/jobs'
+import { JOBS, getJob, getJobsByBranch } from '@/data/jobs'
 import { NotFound } from '@/pages/NotFound'
 import { useT } from '@/lib/i18n'
 
@@ -25,10 +25,17 @@ export function JobDetail() {
 
   if (!job) return <NotFound />
 
-  const branch = BRANCHES.find((b) => b.slug === job.branch)
+  const branch = job.branch ? BRANCHES.find((b) => b.slug === job.branch) : undefined
   const company = job.company ? COMPANIES.find((c) => c.slug === job.company) : null
-  const related = getJobsByBranch(job.branch).filter((j) => j.slug !== job.slug).slice(0, 3)
-  const applyHref = `/careers/apply?role=${encodeURIComponent(job.title)}&branch=${encodeURIComponent(job.branch)}`
+  const related = (job.branch
+    ? getJobsByBranch(job.branch)
+    : JOBS.filter((j) => j.location === job.location)
+  )
+    .filter((j) => j.slug !== job.slug)
+    .slice(0, 3)
+  const applyHref = `/careers/apply?role=${encodeURIComponent(job.title)}${
+    job.branch ? `&branch=${encodeURIComponent(job.branch)}` : ''
+  }`
 
   return (
     <section className="pt-32 pb-24 lg:pt-40 lg:pb-28 min-h-[85vh]">
@@ -109,7 +116,7 @@ export function JobDetail() {
             <MetaRow
               icon={IconMapPin}
               label={t('jobs.branchLabel')}
-              value={branch ? `${branch.city}, ${branch.country}` : job.branch}
+              value={branch ? `${branch.city}, ${branch.country}` : job.location}
             />
             <MetaRow icon={IconUsers} label={t('jobs.teamLabel')} value={job.team} />
             <MetaRow icon={IconBriefcase} label={t('jobs.typeLabel')} value={job.type} />
@@ -154,7 +161,7 @@ export function JobDetail() {
               <p className="inline-flex items-center gap-3 m-0 text-[12px] uppercase tracking-[0.22em] font-semibold text-brand">
                 <span className="w-7 h-px bg-brand-accent" />
                 {t('jobs.openPositions')}{' '}
-                {branch && t('jobs.atLocation', { location: branch.city })}
+                {t('jobs.atLocation', { location: branch?.city ?? job.location })}
               </p>
               <Link
                 to="/jobs"
