@@ -53,14 +53,15 @@ export function Partners() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3, delay: i * 0.02, ease }}
-                className="group relative bg-white h-[138px] flex flex-col items-center justify-center p-5 text-left"
+                className="group relative bg-brand-soft h-[138px] flex flex-col items-center justify-center p-5 text-left"
               >
                 <img
                   src={a.src}
                   alt={a.name}
                   loading="lazy"
                   decoding="async"
-                  className="relative max-h-[52px] max-w-[70%] object-contain grayscale opacity-80 transition-[filter,opacity,transform] duration-500 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
+                  style={{ mixBlendMode: 'multiply' }}
+                  className="relative max-h-[52px] max-w-[70%] object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="relative mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] font-semibold text-brand-muted">
                   <span className="tabular-nums">{a.code}</span>
