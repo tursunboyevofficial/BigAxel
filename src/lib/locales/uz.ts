@@ -1,6 +1,6 @@
 import type { en } from './en'
 
-export const uz: typeof en = {
+export const uz = {
   nav: {
     about: 'Biz haqimizda',
     branches: 'Filiallar',
@@ -411,4 +411,46 @@ export const uz: typeof en = {
       },
     },
   },
-}
+  jobs: {
+    navLabel: 'Ish o‘rinlari',
+    indexEyebrow: 'Karyera · Ochiq lavozimlar',
+    indexTitleL1: 'Karyerangizda',
+    indexTitleL2: 'navbatdagi qadamni qo‘ying.',
+    indexDescription:
+      '5 ta ofisimiz bo‘yicha ochiq lavozimlar. Jamoa, filial yoki ish turi bo‘yicha filtrlang — har bir lavozim o‘z ariza shakli bilan bog‘langan.',
+    filterAll: 'Barchasi',
+    filterTeam: 'Jamoa',
+    filterBranch: 'Filial',
+    filterType: 'Turi',
+    filterCompany: 'Kompaniya',
+    showing: 'Ko‘rsatilmoqda',
+    of: '/',
+    openings: 'ochiq lavozim',
+    apply: 'Ariza',
+    applyForJob: 'Ushbu lavozim uchun ariza yuborish',
+    noResults: 'Bu filtrlarga mos lavozim topilmadi.',
+    clearFilters: 'Filtrlarni tozalash',
+    postedOn: 'E’lon qilingan',
+    responsibilities: 'Siz nima qilasiz',
+    requirements: 'Biz nimani qidiryapmiz',
+    benefits: 'Biz nima taklif qilamiz',
+    backToJobs: 'Barcha lavozimlar',
+    branchLabel: 'Joylashuv',
+    teamLabel: 'Jamoa',
+    typeLabel: 'Ish turi',
+    companyLabel: 'Kompaniya',
+    openPositions: 'Ochiq lavozimlar',
+    openPositionsDescription:
+      'Ushbu filialda hozir yollayotgan lavozimlar. Tafsilotlar uchun va ariza yuborish uchun bosing.',
+    viewRole: 'Ko‘rish',
+    viewAll: 'Barcha lavozimlar',
+    atLocation: '{{location}} da',
+    howWeHire: 'Biz qanday yollaymiz',
+    hireSteps: [
+      'Arizangizni yuboring — majburiy maydonlar yetarli',
+      'Biz uni 5 ish kuni ichida o‘qiymiz',
+      'HR bilan qisqa tanishuv suhbati, keyin jamoa bilan suhbat',
+      'Taklif, hujjatlar, ish kuni',
+    ],
+  },
+} as unknown as typeof en

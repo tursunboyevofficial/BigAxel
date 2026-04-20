@@ -2,10 +2,19 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { IconArrowUpRight } from '@tabler/icons-react'
 import { COMPANIES } from '@/data/companies'
+import { useT } from '@/lib/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
+type CompanyT = {
+  tagline: string
+  sector: string
+  description: string
+  statLabels: string[]
+}
+
 export function CompaniesIndex() {
+  const t = useT()
   return (
     <section className="pt-32 pb-24 lg:pt-44 lg:pb-32 min-h-[80vh]">
       <div className="container mx-auto px-6">
@@ -13,7 +22,7 @@ export function CompaniesIndex() {
           <div className="lg:col-span-2">
             <p className="inline-flex items-center gap-3 m-0 text-[12px] uppercase tracking-[0.22em] font-semibold text-brand">
               <span className="w-7 h-px bg-brand" />
-              Group of companies
+              {t('companies.indexEyebrow')}
             </p>
           </div>
           <h1
@@ -25,15 +34,21 @@ export function CompaniesIndex() {
               letterSpacing: '-0.04em',
             }}
           >
-            Four companies,<br />one playbook.
+            {t('companies.indexTitleL1')}<br />{t('companies.indexTitleL2')}
           </h1>
           <p className="text-brand-muted m-0 max-w-[560px]" style={{ fontSize: 19, lineHeight: '28px' }}>
-            Big Axel is a family of specialised businesses — each with its own focus, but sharing the same operating standards, people-first culture, and global reach.
+            {t('companies.indexDescription')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-brand-line border border-brand-line">
-          {COMPANIES.map((c, i) => (
+          {COMPANIES.map((c, i) => {
+            const cT = t<CompanyT>(`companies.items.${c.slug}`)
+            const sector = cT?.sector ?? c.sector
+            const tagline = cT?.tagline ?? c.tagline
+            const description = cT?.description ?? c.description
+            const statLabels = cT?.statLabels ?? c.stats.map((s) => s.label)
+            return (
             <motion.div
               key={c.slug}
               initial={{ opacity: 0, y: 14 }}
@@ -62,7 +77,7 @@ export function CompaniesIndex() {
                   />
                   <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5">
                     <p className="m-0 text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: c.color }}>
-                      {c.sector}
+                      {sector}
                     </p>
                   </div>
                   <span
@@ -92,12 +107,12 @@ export function CompaniesIndex() {
                       {c.name}
                     </h2>
                     <p className="m-0 mt-3 text-brand-muted max-w-[42ch]" style={{ fontSize: 16, lineHeight: '25px' }}>
-                      {c.tagline} — {c.description.split('.')[0]}.
+                      {tagline} — {description.split('.')[0]}.
                     </p>
 
                     <div className="mt-7 pt-5 border-t border-brand-line flex items-end justify-between gap-4">
                       <ul className="flex flex-wrap gap-x-5 gap-y-2">
-                        {c.stats.map((s) => (
+                        {c.stats.map((s, j) => (
                           <li key={s.label} className="flex items-baseline gap-1.5">
                             <span
                               className="font-medium tabular-nums"
@@ -106,7 +121,7 @@ export function CompaniesIndex() {
                               {s.value}
                             </span>
                             <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-brand-muted">
-                              {s.label}
+                              {statLabels[j] ?? s.label}
                             </span>
                           </li>
                         ))}
@@ -116,7 +131,8 @@ export function CompaniesIndex() {
                 </div>
               </Link>
             </motion.div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

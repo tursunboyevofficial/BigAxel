@@ -1,6 +1,6 @@
 import type { en } from './en'
 
-export const ru: typeof en = {
+export const ru = {
   nav: {
     about: 'О нас',
     branches: 'Филиалы',
@@ -411,4 +411,46 @@ export const ru: typeof en = {
       },
     },
   },
-}
+  jobs: {
+    navLabel: 'Вакансии',
+    indexEyebrow: 'Карьера · Открытые вакансии',
+    indexTitleL1: 'Сделайте следующий шаг',
+    indexTitleL2: 'в своей карьере.',
+    indexDescription:
+      'Открытые позиции в пяти наших офисах. Фильтруйте по команде, филиалу или типу занятости — к каждой вакансии прилагается форма отклика.',
+    filterAll: 'Все',
+    filterTeam: 'Команда',
+    filterBranch: 'Филиал',
+    filterType: 'Тип',
+    filterCompany: 'Компания',
+    showing: 'Показано',
+    of: 'из',
+    openings: 'открытых вакансий',
+    apply: 'Откликнуться',
+    applyForJob: 'Откликнуться на эту вакансию',
+    noResults: 'Под эти фильтры ничего не найдено.',
+    clearFilters: 'Сбросить фильтры',
+    postedOn: 'Опубликовано',
+    responsibilities: 'Чем вы будете заниматься',
+    requirements: 'Кого мы ищем',
+    benefits: 'Что мы предлагаем',
+    backToJobs: 'Все вакансии',
+    branchLabel: 'Локация',
+    teamLabel: 'Команда',
+    typeLabel: 'Занятость',
+    companyLabel: 'Компания',
+    openPositions: 'Открытые вакансии',
+    openPositionsDescription:
+      'Позиции, на которые сейчас идёт набор в этом филиале. Нажмите, чтобы прочитать бриф и откликнуться.',
+    viewRole: 'Смотреть',
+    viewAll: 'Все вакансии',
+    atLocation: 'в {{location}}',
+    howWeHire: 'Как мы нанимаем',
+    hireSteps: [
+      'Отправьте отклик — достаточно обязательных полей',
+      'Мы читаем его в течение 5 рабочих дней',
+      'Короткий созвон с HR, затем разговор с командой',
+      'Оффер, документы, первый день',
+    ],
+  },
+} as unknown as typeof en

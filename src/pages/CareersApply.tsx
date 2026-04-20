@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import {
   IconAlertTriangle,
@@ -46,11 +46,27 @@ const INITIAL: FormState = {
 
 export function CareersApply() {
   const t = useT()
+  const [searchParams] = useSearchParams()
   const ROLES = t<string[]>('apply.roles')
   const roleList = Array.isArray(ROLES) ? ROLES : []
   const nextItems = t<string[]>('apply.nextItems')
   const nextList = Array.isArray(nextItems) ? nextItems : []
-  const [form, setForm] = useState<FormState>(INITIAL)
+
+  const prefillRole = searchParams.get('role') ?? ''
+  const prefillBranch = searchParams.get('branch') ?? ''
+
+  const initial: FormState = {
+    ...INITIAL,
+    // If the role is in the ROLES dropdown use it; otherwise keep blank and
+    // show it in the about field as context.
+    role: roleList.includes(prefillRole) ? prefillRole : '',
+    branch: BRANCHES.some((b) => b.slug === prefillBranch) ? prefillBranch : '',
+    about: prefillRole && !roleList.includes(prefillRole)
+      ? `Applying for: ${prefillRole}\n\n`
+      : '',
+  }
+
+  const [form, setForm] = useState<FormState>(initial)
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)

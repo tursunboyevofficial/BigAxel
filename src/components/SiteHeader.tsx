@@ -19,15 +19,27 @@ export function SiteHeader() {
     {
       kind: 'menu',
       label: t('nav.branches'),
-      items: BRANCHES.map((b) => ({ label: b.city, meta: b.country, to: `/branches/${b.slug}` })),
+      items: BRANCHES.map((b) => ({
+        label: b.city,
+        meta: t<string>(`branches.countries.${b.country}`) || b.country,
+        to: `/branches/${b.slug}`,
+      })),
     },
     {
       kind: 'menu',
       label: t('nav.companies'),
-      items: COMPANIES.map((c) => ({ label: c.name, meta: c.sector, to: `/companies/${c.slug}` })),
+      items: COMPANIES.map((c) => {
+        const cT = t<{ sector: string } | undefined>(`companies.items.${c.slug}`)
+        return {
+          label: c.name,
+          meta: cT?.sector ?? c.sector,
+          to: `/companies/${c.slug}`,
+        }
+      }),
     },
     { kind: 'link', label: t('nav.airlines'), to: '/', hash: '#partners' },
     { kind: 'link', label: t('nav.team'), to: '/', hash: '#team' },
+    { kind: 'link', label: t('jobs.navLabel'), to: '/jobs' },
     { kind: 'link', label: t('nav.faq'), to: '/', hash: '#faq' },
   ]
 

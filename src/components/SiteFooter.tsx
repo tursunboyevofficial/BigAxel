@@ -51,11 +51,14 @@ export function SiteFooter() {
           </FooterCol>
 
           <FooterCol title={t('footer.branches')}>
-            {BRANCHES.map((b) => (
-              <FooterLink key={b.slug} to={`/branches/${b.slug}`}>
-                {b.city}, {b.country}
-              </FooterLink>
-            ))}
+            {BRANCHES.map((b) => {
+              const country = t<string>(`branches.countries.${b.country}`) || b.country
+              return (
+                <FooterLink key={b.slug} to={`/branches/${b.slug}`}>
+                  {b.city}, {country}
+                </FooterLink>
+              )
+            })}
           </FooterCol>
         </div>
 
