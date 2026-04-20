@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import {
@@ -73,6 +73,20 @@ export function CareersApply() {
   const [sendError, setSendError] = useState<string | null>(null)
   const [deliveryInfo, setDeliveryInfo] = useState<{ sent: number; total: number } | null>(null)
 
+  // Bot protection:
+  //  1. Visible math captcha — blocks the laziest bots
+  //  2. Honeypot field `website` — hidden, humans never fill it
+  //  3. Time gate — the form is rejected if submitted within 3s of mount
+  const captcha = useMemo(
+    () => ({ a: 2 + Math.floor(Math.random() * 8), b: 1 + Math.floor(Math.random() * 7) }),
+    // intentionally static per mount
+    []
+  )
+  const [captchaAnswer, setCaptchaAnswer] = useState('')
+  const [captchaError, setCaptchaError] = useState<string | null>(null)
+  const [honeypot, setHoneypot] = useState('')
+  const mountedAt = useRef(Date.now())
+
   const filled = useMemo(() => {
     const required: (keyof FormState)[] = ['fullName', 'email', 'role', 'branch', 'about']
     const total = required.length
@@ -105,12 +119,29 @@ export function CareersApply() {
     if (!form.branch.trim()) next.branch = t('apply.errors.pickBranch')
     if (!form.about.trim() || form.about.trim().length < 20) next.about = t('apply.errors.aboutTooShort')
     setErrors(next)
-    if (Object.keys(next).length > 0) return
+
+    // Captcha check
+    const expected = captcha.a + captcha.b
+    const captchaOk = Number(captchaAnswer.trim()) === expected
+    setCaptchaError(captchaOk ? null : t('apply.captchaError'))
+
+    if (Object.keys(next).length > 0 || !captchaOk) return
+
+    // Honeypot + time gate — silently bail (don't tip off the bot)
+    const elapsed = Date.now() - mountedAt.current
+    if (honeypot.trim() !== '' || elapsed < 3000) {
+      setSendError(t('apply.botDetected'))
+      return
+    }
 
     setSending(true)
     setSendError(null)
     try {
-      const { sent, total } = await submitApplication(form)
+      const { sent, total } = await submitApplication({
+        ...form,
+        website: honeypot,
+        elapsedMs: elapsed,
+      })
       setDeliveryInfo({ sent, total })
       setSubmitted(true)
     } catch (err) {
@@ -390,6 +421,61 @@ export function CareersApply() {
                         />
                       </div>
                     </Field>
+                  </div>
+
+                  {/* Honeypot — invisible to humans, most bots fill every input */}
+                  <div
+                    aria-hidden
+                    className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden"
+                  >
+                    <label>
+                      Website (leave this empty)
+                      <input
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                      />
+                    </label>
+                  </div>
+
+                  {/* Visible math captcha */}
+                  <div className="px-5 sm:px-6 lg:px-10 pb-3 pt-1">
+                    <div className="bg-brand-soft/60 border border-brand-line px-4 py-3 flex items-center gap-3 flex-wrap">
+                      <div className="flex-1 min-w-[180px]">
+                        <p className="m-0 text-[10px] uppercase tracking-[0.22em] font-semibold text-brand-muted">
+                          {t('apply.captchaLabel')}
+                        </p>
+                        <p className="m-0 mt-1 text-[13px] font-semibold text-brand tabular-nums">
+                          {t('apply.captchaPrompt', { a: captcha.a, b: captcha.b })}
+                        </p>
+                      </div>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={captchaAnswer}
+                        onChange={(e) => {
+                          setCaptchaAnswer(e.target.value)
+                          if (captchaError) setCaptchaError(null)
+                        }}
+                        placeholder={t('apply.captchaPlaceholder')}
+                        className={cn(
+                          'h-11 w-28 px-3 text-center text-[15px] font-semibold text-brand bg-white border outline-none tabular-nums transition-colors',
+                          captchaError
+                            ? 'border-brand-accent focus:border-brand-accent'
+                            : 'border-brand-line focus:border-brand'
+                        )}
+                        aria-invalid={!!captchaError}
+                        aria-label={t('apply.captchaPrompt', { a: captcha.a, b: captcha.b })}
+                      />
+                    </div>
+                    {captchaError && (
+                      <p className="m-0 mt-2 text-[11px] uppercase tracking-[0.14em] font-semibold text-brand-accent">
+                        {captchaError}
+                      </p>
+                    )}
                   </div>
 
                   {sendError && (

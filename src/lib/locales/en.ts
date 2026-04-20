@@ -254,6 +254,11 @@ export const en = {
     privacy: 'Your info stays private — one application, one team.',
     submit: 'Send application',
     sending: 'Sending…',
+    captchaLabel: 'Quick check — prove you are human',
+    captchaPrompt: 'What is {{a}} + {{b}}?',
+    captchaPlaceholder: 'Answer',
+    captchaError: 'That is not the right answer.',
+    botDetected: 'Something looks off. Please reload the page and try again.',
     roles: [
       'Sales agent',
       'Ticketing agent',

@@ -10,8 +10,15 @@ export type ApplicationPayload = {
   about: string
 }
 
+export type SubmitPayload = ApplicationPayload & {
+  /** Honeypot field — must be empty. Bots typically fill every input. */
+  website?: string
+  /** Milliseconds between form mount and submit. Server rejects < 3000. */
+  elapsedMs?: number
+}
+
 export async function submitApplication(
-  form: ApplicationPayload
+  form: SubmitPayload
 ): Promise<{ sent: number; total: number }> {
   const res = await fetch('/api/apply', {
     method: 'POST',

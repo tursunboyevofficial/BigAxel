@@ -15,15 +15,19 @@ type ApplicationPayload = {
   experience?: string
   portfolio?: string
   about: string
+  website?: string
+  elapsedMs?: number
 }
 
-const REQUIRED_FIELDS: (keyof ApplicationPayload)[] = [
+const REQUIRED_FIELDS: ('fullName' | 'email' | 'role' | 'branch' | 'about')[] = [
   'fullName',
   'email',
   'role',
   'branch',
   'about',
 ]
+
+const MIN_ELAPSED_MS = 3000
 
 export default async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST') {
@@ -42,6 +46,15 @@ export default async function handler(request: Request): Promise<Response> {
     body = (await request.json()) as ApplicationPayload
   } catch {
     return json({ error: 'Invalid JSON payload' }, 400)
+  }
+
+  // Bot checks — fail closed, but return 400 so the UI can show a generic
+  // error. Honeypot and time gate are silent to avoid teaching bots.
+  if (typeof body.website === 'string' && body.website.trim().length > 0) {
+    return json({ error: 'Rejected' }, 400)
+  }
+  if (typeof body.elapsedMs === 'number' && body.elapsedMs < MIN_ELAPSED_MS) {
+    return json({ error: 'Rejected' }, 400)
   }
 
   for (const key of REQUIRED_FIELDS) {

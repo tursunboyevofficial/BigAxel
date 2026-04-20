@@ -256,6 +256,11 @@ export const uz = {
     privacy: 'Maʼlumotlaringiz maxfiy saqlanadi — bir ariza, bir jamoa.',
     submit: 'Arizani yuborish',
     sending: 'Yuborilmoqda…',
+    captchaLabel: 'Tezkor tekshiruv — bot emasligingizni tasdiqlang',
+    captchaPrompt: '{{a}} + {{b}} nechiga teng?',
+    captchaPlaceholder: 'Javob',
+    captchaError: 'Javob notoʻgʻri.',
+    botDetected: 'Nimadir xato. Sahifani yangilab qayta urinib koʻring.',
     roles: [
       'Sotuv agenti',
       'Ticketing agent',
