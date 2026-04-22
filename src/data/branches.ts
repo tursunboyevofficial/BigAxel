@@ -94,6 +94,22 @@ export const BRANCHES: Branch[] = [
       'https://commons.wikimedia.org/wiki/Special:FilePath/Riga_(33844464828).jpg?width=1600',
     companies: ['summitstone'],
   },
+  {
+    slug: 'san-francisco',
+    city: 'San Francisco',
+    country: 'United States',
+    countryCode: 'US',
+    tagline: 'Americas hub',
+    description:
+      'Our newest desk opens in San Francisco — the bridge between Big Axel Group and the Americas travel market. The team handles US-facing enterprise clients, west-coast carrier relationships, and product partnerships with Silicon Valley travel tech.',
+    established: '2025',
+    staff: '15+',
+    address: 'San Francisco, California, USA',
+    focus: ['US enterprise clients', 'Americas ticketing', 'Product partnerships'],
+    image:
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Golden_Gate_Bridge_as_seen_from_Battery_Spencer.jpg?width=1600',
+    companies: ['bigaxel-tech'],
+  },
 ]
 
 export function getBranch(slug: string) {

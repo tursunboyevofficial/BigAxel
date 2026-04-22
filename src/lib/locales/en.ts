@@ -15,7 +15,7 @@ export const en = {
     titleLine2: 'meets ',
     titleAccent: 'people.',
     description:
-      'A family of companies across travel, finance, entertainment, and technology — built in Tashkent, serving clients in 50 countries.',
+      'A family of companies across travel, finance, entertainment, and technology — built in Global, serving clients in 50 countries.',
     ctaApply: 'Join the team',
     ctaCompanies: 'Explore our companies',
     scroll: 'Scroll',
@@ -311,6 +311,7 @@ export const en = {
       India: 'India',
       Egypt: 'Egypt',
       Latvia: 'Latvia',
+      'United States': 'United States',
     },
     items: {
       tashkent: {
@@ -342,6 +343,12 @@ export const en = {
         description:
           'Our Riga presence connects Big Axel to the European travel corridor. The team handles EU-facing clients, Schengen ticketing, and coordinates with European airline partners across the Baltics and beyond.',
         focus: ['EU clients', 'Schengen ticketing', 'European carriers'],
+      },
+      'san-francisco': {
+        tagline: 'Americas hub',
+        description:
+          'Our newest desk opens in San Francisco — the bridge between Big Axel Group and the Americas travel market. The team handles US-facing enterprise clients, west-coast carrier relationships, and product partnerships with Silicon Valley travel tech.',
+        focus: ['US enterprise clients', 'Americas ticketing', 'Product partnerships'],
       },
     },
   },

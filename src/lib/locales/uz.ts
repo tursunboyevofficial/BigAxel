@@ -17,7 +17,7 @@ export const uz = {
     titleLine2: "odamlar bilan ",
     titleAccent: 'uchrashadi.',
     description:
-      'Sayohat, moliya, koʻngilochar va texnologiya sohalarida faoliyat yurituvchi kompaniyalar oilasi — Toshkentda qurilgan, 50 ta davlatda mijozlarga xizmat koʻrsatadi.',
+      'Sayohat, moliya, koʻngilochar va texnologiya sohalarida faoliyat yurituvchi kompaniyalar oilasi — global miqyosda qurilgan, 50 ta davlatda mijozlarga xizmat koʻrsatadi.',
     ctaApply: 'Jamoaga qoʻshiling',
     ctaCompanies: 'Kompaniyalarimizni koʻring',
     scroll: 'Aylantiring',
@@ -313,6 +313,7 @@ export const uz = {
       India: 'Hindiston',
       Egypt: 'Misr',
       Latvia: 'Latviya',
+      'United States': 'AQSh',
     },
     items: {
       tashkent: {
@@ -344,6 +345,12 @@ export const uz = {
         description:
           'Rigadagi mavjudligimiz Big Axelni Yevropa sayohat koridori bilan bogʻlaydi. Jamoa Yevropa mijozlari bilan ishlaydi, Shengen chiptalarini chiqaradi va Boltiqboʻyi hamda uning atrofidagi Yevropa aviakompaniyalari bilan muvofiqlashadi.',
         focus: ['Yevropa mijozlari', 'Shengen chiptalari', 'Yevropa tashuvchilari'],
+      },
+      'san-francisco': {
+        tagline: 'Amerika markazi',
+        description:
+          'Eng yangi ofisimiz San-Fransiskoda — Big Axel Group va Amerika sayohat bozori orasidagi koʻprik. Jamoa AQSh korporativ mijozlari, Gʻarbiy sohil aviakompaniyalari va Silicon Valley sayohat texnologiyalari bilan mahsulot hamkorligini boshqaradi.',
+        focus: ['AQSh korporativ mijozlari', 'Amerika chiptalari', 'Mahsulot hamkorligi'],
       },
     },
   },

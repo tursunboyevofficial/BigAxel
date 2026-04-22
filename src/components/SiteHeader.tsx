@@ -97,7 +97,7 @@ export function SiteHeader() {
           willChange: 'max-width, background-color',
         }}
         className={cn(
-          'mx-auto h-16 flex items-center justify-between gap-6 px-5 lg:px-6',
+          'mx-auto h-16 flex items-center justify-between gap-4 px-5 lg:px-6',
           !scrolled && dark && 'border-b border-white/30',
           !scrolled && !dark && 'border-b border-brand-line'
         )}
@@ -112,7 +112,7 @@ export function SiteHeader() {
           BIG AXEL
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-0.5">
           {NAV.map((item) =>
             item.kind === 'link' ? (
               <HashLink key={item.label} to={item.to} hash={item.hash} dark={dark}>
@@ -155,7 +155,7 @@ export function SiteHeader() {
             aria-expanded={mobileOpen}
             aria-label="Toggle menu"
             className={cn(
-              'lg:hidden inline-flex items-center justify-center h-9 w-9 transition-colors',
+              'xl:hidden inline-flex items-center justify-center h-9 w-9 transition-colors',
               dark ? 'text-white' : 'text-brand'
             )}
           >
@@ -171,7 +171,7 @@ export function SiteHeader() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="lg:hidden mx-3 mt-2 bg-white border border-brand-line shadow-2xl max-h-[80vh] overflow-y-auto"
+            className="xl:hidden mx-3 mt-2 bg-white border border-brand-line shadow-2xl max-h-[80vh] overflow-y-auto"
           >
             {NAV.map((item) =>
               item.kind === 'link' ? (
@@ -301,7 +301,7 @@ function HashLink({
       to={targetPath}
       onClick={handleClick}
       className={cn(
-        'px-3 py-2 text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors hover:text-brand-accent',
+        'px-2.5 py-2 text-[11.5px] font-semibold uppercase tracking-[0.1em] transition-colors hover:text-brand-accent',
         dark ? 'text-white/90' : 'text-brand'
       )}
     >
@@ -333,7 +333,7 @@ function Dropdown({
         type="button"
         onClick={() => (open ? onClose() : onOpen())}
         className={cn(
-          'inline-flex items-center gap-1 px-3 py-2 text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors hover:text-brand-accent',
+          'inline-flex items-center gap-1 px-2.5 py-2 text-[11.5px] font-semibold uppercase tracking-[0.1em] transition-colors hover:text-brand-accent',
           dark ? 'text-white/90' : 'text-brand'
         )}
       >
