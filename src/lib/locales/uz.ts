@@ -2,10 +2,10 @@ import type { en } from './en'
 
 export const uz = {
   nav: {
-    about: 'Biz haqimizda',
+    about: 'Haqimizda',
     branches: 'Filiallar',
     companies: 'Kompaniyalar',
-    airlines: 'Aviakompaniyalar',
+    airlines: 'Aviakompaniya',
     team: 'Jamoa',
     faq: 'FAQ',
     apply: 'Ariza',
@@ -18,8 +18,8 @@ export const uz = {
     titleAccent: 'uchrashadi.',
     description:
       'Sayohat, moliya, koʻngilochar va texnologiya sohalarida faoliyat yurituvchi kompaniyalar oilasi — global miqyosda qurilgan, 50 ta davlatda mijozlarga xizmat koʻrsatadi.',
-    ctaApply: 'Jamoaga qoʻshiling',
-    ctaCompanies: 'Kompaniyalarimizni koʻring',
+    ctaApply: 'Qoʻshiling',
+    ctaCompanies: 'Kompaniyalarimiz',
     scroll: 'Aylantiring',
     yearMark: '50 davlat',
   },
@@ -41,8 +41,8 @@ export const uz = {
       peopleTitle: 'Odam birinchi',
       peopleText: "Jamoamizning koʻpchiligi bu yerda boshlab bizning bilan oʻsgan. Mentorlik — siyosat emas, har kungi amaliyot.",
     },
-    ctaCompanies: 'Kompaniyalarimizni koʻring',
-    ctaApply: 'Jamoaga qoʻshiling',
+    ctaCompanies: 'Kompaniyalarimiz',
+    ctaApply: 'Qoʻshiling',
     sinceLabel: 'Boshlanishi',
     metricsLabel: 'Raqamlarda',
     metricCountries: 'Davlat',
@@ -57,9 +57,9 @@ export const uz = {
     titleAccent: 'eng yirik',
     description: 'Uchta global alyans bo‘yicha 16 ta aviakompaniya — istalgan logotipni bosib, hamkorlik haqida qisqacha ma’lumot oling.',
     filterAll: 'Barchasi',
-    showing: 'Koʻrsatilmoqda',
+    showing: 'Koʻrsatildi',
     of: '/',
-    carriers: 'ta tashuvchi',
+    carriers: 'tashuvchi',
     modal: {
       hub: 'Markaz',
       fleet: 'Parki',
@@ -115,10 +115,10 @@ export const uz = {
   },
   stats: {
     items: [
-      { value: '5', label: 'Ofis joylashuvi' },
-      { value: '200', label: 'Xodimlar soni' },
-      { value: '10', label: 'Yillik tajriba' },
-      { value: '10', label: 'Mukofotlar' },
+      { value: '5', label: 'Ofis' },
+      { value: '200', label: 'Xodim' },
+      { value: '10', label: 'Yil tajriba' },
+      { value: '10', label: 'Mukofot' },
     ],
   },
   cta: {
@@ -133,8 +133,8 @@ export const uz = {
       'Birinchi kundan mentorlik',
     ],
     cardEyebrow: 'Karyera',
-    cardTitle: 'Ariza topshirish →',
-    takes: '2 daqiqa oladi',
+    cardTitle: 'Ariza →',
+    takes: '2 daqiqa',
   },
   faq: {
     eyebrow: 'FAQ',
@@ -180,7 +180,7 @@ export const uz = {
         text: "Manba sayt ijtimoiy post uslubini saqlash uchun kontent plitkasi sifatida ishlatilgan.",
       },
     ],
-    readMore: 'Batafsil oʻqish',
+    readMore: 'Oʻqish',
     backToBlog: 'Blogga qaytish',
     readNext: 'Keyingi oʻqish',
     minRead: '{{n}} daqiqa oʻqish',
@@ -188,7 +188,7 @@ export const uz = {
   },
   contact: {
     eyebrow: 'Aloqa',
-    title: 'Keling gaplashamiz',
+    title: 'Gaplashamiz',
     description:
       'Quyidagi istalgan kanal orqali bogʻlaning — barchasini oʻqiymiz va bir ish kuni ichida javob beramiz.',
     fields: {
@@ -204,7 +204,7 @@ export const uz = {
   },
   footer: {
     description: 'Sayohat, moliya, koʻngilochar va texnologiya sohalaridagi kompaniyalar guruhi — 50 ta davlatdagi mijozlarga xizmat koʻrsatamiz.',
-    ctaApply: 'Bizga qoʻshiling →',
+    ctaApply: 'Qoʻshiling →',
     company: 'Kompaniya',
     companies: 'Kompaniyalar',
     branches: 'Filiallar',
@@ -214,8 +214,8 @@ export const uz = {
   apply: {
     backHome: 'Bosh sahifa',
     eyebrow: 'Karyera · Hozir ishga olamiz',
-    titleL1: 'Bizga',
-    titleL2: 'qoʻshiling.',
+    titleL1: 'Ariza',
+    titleL2: 'yuboring.',
     description:
       'Oʻzingiz va qaysi jamoa sizga mos kelishini qisqacha ayting. Biz har bir arizani oʻqiymiz va bir ish haftasi ichida javob beramiz.',
     nextTitle: 'Keyingi bosqichlar',
@@ -428,7 +428,7 @@ export const uz = {
     },
   },
   jobs: {
-    navLabel: 'Ish o‘rinlari',
+    navLabel: 'Vakansiya',
     indexEyebrow: 'Karyera · Ochiq lavozimlar',
     indexTitleL1: 'Karyerangizda',
     indexTitleL2: 'navbatdagi qadamni qo‘ying.',
@@ -443,7 +443,7 @@ export const uz = {
     of: '/',
     openings: 'ochiq lavozim',
     apply: 'Ariza',
-    applyForJob: 'Ushbu lavozim uchun ariza yuborish',
+    applyForJob: 'Ariza yuborish',
     noResults: 'Bu filtrlarga mos lavozim topilmadi.',
     clearFilters: 'Filtrlarni tozalash',
     postedOn: 'E’lon qilingan',
