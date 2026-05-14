@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import {
@@ -11,14 +11,34 @@ import {
   IconPaperclip,
   IconSend,
   IconUser,
+  IconX,
 } from '@tabler/icons-react'
 import { BRANCHES } from '@/data/branches'
 import { COMPANIES } from '@/data/companies'
 import { cn } from '@/lib/utils'
-import { submitApplication } from '@/lib/telegram'
+import { fetchPublicJobOpenings, submitApplication, type PublicJobOpening } from '@/lib/telegram'
 import { useT } from '@/lib/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
+const RESUME_MAX_BYTES = 100 * 1024 * 1024
+const RESUME_ACCEPT = '.pdf,.doc,.docx,.txt,.rtf'
+const RESUME_EXTENSIONS = ['.pdf', '.doc', '.docx', '.txt', '.rtf']
+
+function formatBytes(bytes: number): string {
+  if (!bytes || bytes <= 0) return '0 B'
+  if (bytes >= 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  }
+  if (bytes >= 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`
+  }
+  return `${bytes} B`
+}
+
+function isAllowedResumeFile(file: File): boolean {
+  const lower = file.name.toLowerCase()
+  return RESUME_EXTENSIONS.some((ext) => lower.endsWith(ext))
+}
 
 type FormState = {
   fullName: string
@@ -30,6 +50,7 @@ type FormState = {
   experience: string
   portfolio: string
   about: string
+  resume: File | null
 }
 
 const INITIAL: FormState = {
@@ -42,26 +63,46 @@ const INITIAL: FormState = {
   experience: '',
   portfolio: '',
   about: '',
+  resume: null,
 }
 
 export function CareersApply() {
   const t = useT()
   const [searchParams] = useSearchParams()
   const ROLES = t<string[]>('apply.roles')
-  const roleList = Array.isArray(ROLES) ? ROLES : []
+  const roleList = useMemo(() => (Array.isArray(ROLES) ? ROLES : []), [ROLES])
+  const [publicRoles, setPublicRoles] = useState<PublicJobOpening[]>([])
   const nextItems = t<string[]>('apply.nextItems')
   const nextList = Array.isArray(nextItems) ? nextItems : []
 
   const prefillRole = searchParams.get('role') ?? ''
   const prefillBranch = searchParams.get('branch') ?? ''
 
+  const roleOptions = useMemo(() => {
+    if (publicRoles.length === 0) {
+      return roleList
+    }
+
+    const seen = new Set<string>()
+    const deduped = publicRoles
+      .map((role) => role.title.trim())
+      .filter((title) => title.length > 0)
+      .filter((title) => {
+        if (seen.has(title)) return false
+        seen.add(title)
+        return true
+      })
+
+    return deduped.length > 0 ? deduped : roleList
+  }, [publicRoles, roleList])
+
   const initial: FormState = {
     ...INITIAL,
     // If the role is in the ROLES dropdown use it; otherwise keep blank and
     // show it in the about field as context.
-    role: roleList.includes(prefillRole) ? prefillRole : '',
+    role: roleOptions.includes(prefillRole) ? prefillRole : '',
     branch: BRANCHES.some((b) => b.slug === prefillBranch) ? prefillBranch : '',
-    about: prefillRole && !roleList.includes(prefillRole)
+    about: prefillRole && !roleOptions.includes(prefillRole)
       ? `Applying for: ${prefillRole}\n\n`
       : '',
   }
@@ -71,7 +112,30 @@ export function CareersApply() {
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
   const [sendError, setSendError] = useState<string | null>(null)
-  const [deliveryInfo, setDeliveryInfo] = useState<{ sent: number; total: number } | null>(null)
+  const [applicationId, setApplicationId] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!prefillRole || form.role) return
+    setForm((prev) => {
+      if (roleOptions.includes(prefillRole)) {
+        return {
+          ...prev,
+          role: prefillRole,
+          about: prev.about.startsWith(`Applying for: ${prefillRole}`) ? '' : prev.about,
+        }
+      }
+
+      const marker = `Applying for: ${prefillRole}`
+      if (prev.about.includes(marker)) {
+        return prev
+      }
+
+      return {
+        ...prev,
+        about: `${marker}\n\n${prev.about}`,
+      }
+    })
+  }, [prefillRole, roleOptions, form.role])
 
   // Bot protection:
   //  1. Visible math captcha — blocks the laziest bots
@@ -87,8 +151,25 @@ export function CareersApply() {
   const [honeypot, setHoneypot] = useState('')
   const mountedAt = useRef(Date.now())
 
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const jobs = await fetchPublicJobOpenings()
+        if (!cancelled) {
+          setPublicRoles(jobs)
+        }
+      } catch {
+        // no-op: fallback to static role list
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const filled = useMemo(() => {
-    const required: (keyof FormState)[] = ['fullName', 'email', 'role', 'branch', 'about']
+    const required: (keyof Omit<FormState, 'resume'>)[] = ['fullName', 'email', 'phone', 'role', 'branch', 'about']
     const total = required.length
     const done = required.filter((k) => form[k].trim().length > 0).length
     return Math.round((done / total) * 100)
@@ -109,12 +190,57 @@ export function CareersApply() {
     })
   }
 
+  const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    if (!file) {
+      setForm((f) => ({ ...f, resume: null }))
+      setErrors((prev) => {
+        if (!prev.resume) return prev
+        const next = { ...prev }
+        delete next.resume
+        return next
+      })
+      return
+    }
+
+    if (file.size > RESUME_MAX_BYTES) {
+      setErrors((prev) => ({ ...prev, resume: t('apply.errors.resumeSize') }))
+      setForm((f) => ({ ...f, resume: null }))
+      return
+    }
+
+    if (!isAllowedResumeFile(file)) {
+      setErrors((prev) => ({ ...prev, resume: t('apply.errors.resumeType') }))
+      setForm((f) => ({ ...f, resume: null }))
+      return
+    }
+
+    setErrors((prev) => {
+      if (!prev.resume) return prev
+      const next = { ...prev }
+      delete next.resume
+      return next
+    })
+    setForm((f) => ({ ...f, resume: file }))
+  }
+
+  const clearResume = () => {
+    setForm((f) => ({ ...f, resume: null }))
+    setErrors((prev) => {
+      if (!prev.resume) return prev
+      const next = { ...prev }
+      delete next.resume
+      return next
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const next: Partial<Record<keyof FormState, string>> = {}
     if (!form.fullName.trim()) next.fullName = t('apply.errors.required')
     if (!form.email.trim()) next.email = t('apply.errors.required')
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = t('apply.errors.invalidEmail')
+    if (!form.phone.trim()) next.phone = t('apply.errors.required')
     if (!form.role.trim()) next.role = t('apply.errors.pickRole')
     if (!form.branch.trim()) next.branch = t('apply.errors.pickBranch')
     if (!form.about.trim() || form.about.trim().length < 20) next.about = t('apply.errors.aboutTooShort')
@@ -137,12 +263,19 @@ export function CareersApply() {
     setSending(true)
     setSendError(null)
     try {
-      const { sent, total } = await submitApplication({
+      const selectedBranch = BRANCHES.find((branch) => branch.slug === form.branch)
+      const company = COMPANIES.find((c) => c.slug === form.company)
+      const selectedJobOpening = publicRoles.find((role) => role.title === form.role)
+
+      const { id } = await submitApplication({
         ...form,
+        branch: selectedBranch ? `${selectedBranch.city}, ${selectedBranch.country}` : form.branch,
+        company: company?.name || form.company,
+        job_opening_id: selectedJobOpening?.id,
         website: honeypot,
         elapsedMs: elapsed,
       })
-      setDeliveryInfo({ sent, total })
+      setApplicationId(id)
       setSubmitted(true)
     } catch (err) {
       setSendError(err instanceof Error ? err.message : t('apply.errors.generic'))
@@ -238,9 +371,9 @@ export function CareersApply() {
                       email: form.email,
                     })}
                   </p>
-                  {deliveryInfo && (
+                  {applicationId !== null && (
                     <p className="m-0 mt-3 text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
-                      {t('apply.success.delivered', { sent: deliveryInfo.sent, total: deliveryInfo.total })}
+                      {`Application ID: ${applicationId}`}
                     </p>
                   )}
                   <div className="mt-8 flex items-center justify-center gap-4">
@@ -249,7 +382,7 @@ export function CareersApply() {
                       onClick={() => {
                         setForm(INITIAL)
                         setSubmitted(false)
-                        setDeliveryInfo(null)
+                        setApplicationId(null)
                         setSendError(null)
                       }}
                       className="text-[12px] uppercase tracking-[0.18em] font-semibold text-brand pb-1 border-b border-brand hover:text-brand-accent hover:border-brand-accent transition-colors"
@@ -325,7 +458,7 @@ export function CareersApply() {
                       </InputWrapper>
                     </Field>
 
-                    <Field label={t('apply.fields.phoneOptional')}>
+                    <Field label={t('apply.fields.phone')}>
                       <InputWrapper>
                         <input
                           type="tel"
@@ -345,7 +478,7 @@ export function CareersApply() {
                           className="w-full bg-transparent outline-none text-[15px] text-brand"
                         >
                           <option value="">{t('apply.placeholders.rolePick')}</option>
-                          {roleList.map((r) => (
+                          {roleOptions.map((r) => (
                             <option key={r} value={r}>{r}</option>
                           ))}
                         </select>
@@ -405,6 +538,38 @@ export function CareersApply() {
                           className="flex-1 bg-transparent outline-none text-[15px] text-brand placeholder:text-brand-muted/60"
                         />
                       </InputWrapper>
+                    </Field>
+
+                    <Field label={t('apply.fields.cvOptional')} error={errors.resume} className="sm:col-span-2">
+                      <div className="space-y-2">
+                        <InputWrapper>
+                          <IconPaperclip size={16} stroke={1.6} className="text-brand-muted" />
+                          <input
+                            type="file"
+                            accept={RESUME_ACCEPT}
+                            onChange={handleResumeChange}
+                            className="flex-1 bg-transparent outline-none text-[13px] text-brand file:mr-3 file:rounded-full file:border-0 file:bg-brand-soft file:px-3 file:py-1.5 file:text-[11px] file:font-semibold file:uppercase file:tracking-[0.08em] file:text-brand"
+                          />
+                        </InputWrapper>
+                        {form.resume ? (
+                          <div className="flex items-center justify-between gap-3 text-[11px] text-brand-muted">
+                            <span className="truncate">
+                              {form.resume.name} ({formatBytes(form.resume.size)})
+                            </span>
+                            <button
+                              type="button"
+                              onClick={clearResume}
+                              className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] font-semibold text-brand-muted hover:text-brand-accent"
+                            >
+                              <IconX size={12} stroke={1.8} /> {t('apply.clear')}
+                            </button>
+                          </div>
+                        ) : (
+                          <p className="m-0 text-[11px] text-brand-muted">
+                            {t('apply.placeholders.cv')}
+                          </p>
+                        )}
+                      </div>
                     </Field>
 
                     <Field label={t('apply.fields.about')} error={errors.about} className="sm:col-span-2">

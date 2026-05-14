@@ -11,13 +11,6 @@ type Props = {
   idleFallbackMs?: number
 }
 
-declare global {
-  interface Window {
-    requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number
-    cancelIdleCallback?: (id: number) => void
-  }
-}
-
 export function DeferredSection({
   children,
   minHeight = 560,

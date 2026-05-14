@@ -18,7 +18,10 @@ const STORAGE_KEY = 'bigaxel:lang:v1'
 type Ctx = {
   lang: Lang
   setLang: (l: Lang) => void
-  t: <T = string>(key: string, vars?: Record<string, string | number>) => T
+  t: {
+    (key: string, vars?: Record<string, string | number>): string
+    <T>(key: string, vars?: Record<string, string | number>): T
+  }
 }
 
 const LangContext = createContext<Ctx>({

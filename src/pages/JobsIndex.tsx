@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { IconArrowUpRight, IconMapPin, IconUsers, IconBriefcase } from '@tabler/icons-react'
@@ -6,29 +6,133 @@ import { COMPANIES } from '@/data/companies'
 import { JOBS, JOB_TEAMS, JOB_TYPES, getJobLocations, type Job } from '@/data/jobs'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
+import { fetchPublicJobOpenings, type PublicJobOpening } from '@/lib/telegram'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 type TeamFilter = (typeof JOB_TEAMS)[number] | 'All'
 type TypeFilter = (typeof JOB_TYPES)[number] | 'All'
 type LocationFilter = string | 'All'
+type DisplayJob = Job
+const normalizeTitle = (title: string) =>
+  title
+    .trim()
+    .toLowerCase()
+    .replace(/[—–-]/g, ' ')
+    .replace(/[^\w\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+function inferTeam(department: string | null | undefined): Job['team'] {
+  if (!department) return 'Sales'
+
+  const normalized = department.toLowerCase().trim()
+  const found = JOB_TEAMS.find((team) => normalized.includes(team.toLowerCase()))
+  return found ?? 'Sales'
+}
+
+function inferType(value: string | null | undefined): Job['type'] {
+  if (!value) return 'Full-time'
+  const normalized = value.toLowerCase()
+  if (normalized.includes('part')) return 'Part-time'
+  if (normalized.includes('intern')) return 'Internship'
+  if (normalized.includes('contract')) return 'Contract'
+  return 'Full-time'
+}
+
+function toDisplayJob(openJob: PublicJobOpening): DisplayJob {
+  return {
+    slug: openJob.slug || `open-role-${openJob.id}`,
+    title: openJob.title,
+    team: inferTeam(openJob.department),
+    type: inferType(openJob.employment_type),
+    location: openJob.location || 'Remote',
+    summary: openJob.department ? `${openJob.department} opening` : 'Open position',
+    description: [],
+    requirements: [],
+    benefits: [],
+    postedAt: new Date().toISOString().slice(0, 10),
+    // Keep a stable slug for API-only jobs so route generation remains stable.
+  }
+}
 
 export function JobsIndex() {
   const t = useT()
   const [team, setTeam] = useState<TeamFilter>('All')
   const [type, setType] = useState<TypeFilter>('All')
   const [location, setLocation] = useState<LocationFilter>('All')
+  const [openJobs, setOpenJobs] = useState<PublicJobOpening[] | null>(null)
+  const [jobsSource, setJobsSource] = useState<'loading' | 'live' | 'fallback'>('loading')
+  const [jobsError, setJobsError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const jobs = await fetchPublicJobOpenings()
+        if (!cancelled) {
+          setOpenJobs(jobs)
+          setJobsSource('live')
+          setJobsError(null)
+        }
+      } catch {
+        if (!cancelled) {
+          setOpenJobs(null)
+          setJobsSource('fallback')
+          setJobsError('Unable to load live openings right now.')
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const realJobs = useMemo(() => {
+    if (jobsSource !== 'live') {
+      return JOBS
+    }
+
+    if (!openJobs || openJobs.length === 0) {
+      return []
+    }
+
+    const openTitles = new Set(
+      openJobs
+        .map((job) => normalizeTitle(job.title))
+        .filter((title): title is string => Boolean(title))
+    )
+    const catalogJobs = JOBS
+      .filter((job) => openTitles.has(normalizeTitle(job.title)))
+      .map((job) => ({ ...job }))
+
+    const remaining = openJobs.filter((job) => !openTitles.has(normalizeTitle(job.title)))
+    const apiOnlyJobs = remaining.map((job) => toDisplayJob(job))
+
+    return [...catalogJobs, ...apiOnlyJobs]
+  }, [jobsSource, openJobs])
+
+  const hasMappableApiJobs = jobsSource === 'live' && openJobs !== null && openJobs.length > 0
 
   const filtered = useMemo(
     () =>
-      JOBS.filter((j) => (team === 'All' || j.team === team))
+      realJobs.filter((j) => (team === 'All' || j.team === team))
         .filter((j) => (type === 'All' || j.type === type))
         .filter((j) => (location === 'All' || j.location === location)),
-    [team, type, location]
+    [realJobs, team, type, location]
   )
 
   const anyFilter = team !== 'All' || type !== 'All' || location !== 'All'
-  const locationOptions = useMemo(() => getJobLocations(), [])
+  const locationOptions = useMemo(() => {
+    if (!hasMappableApiJobs) {
+      return getJobLocations()
+    }
+    const locationSet = new Set(getJobLocations())
+    ;(openJobs ?? []).forEach((job) => {
+      if (job.location) locationSet.add(job.location)
+    })
+    return [...locationSet].sort((a, b) => a.localeCompare(b))
+  }, [hasMappableApiJobs, openJobs])
 
   return (
     <section className="pt-32 pb-24 lg:pt-44 lg:pb-32 min-h-[80vh]">
@@ -102,8 +206,13 @@ export function JobsIndex() {
         {/* Count */}
         <p className="mb-6 text-[12px] uppercase tracking-[0.18em] font-semibold text-brand-muted">
           {t('jobs.showing')} <span className="text-brand tabular-nums">{filtered.length}</span>{' '}
-          {t('jobs.of')} <span className="tabular-nums">{JOBS.length}</span> {t('jobs.openings')}
+          {t('jobs.of')} <span className="tabular-nums">{realJobs.length}</span> {t('jobs.openings')}
         </p>
+        {jobsSource === 'fallback' && jobsError && (
+          <p className="mb-6 text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-accent">
+            {jobsError}
+          </p>
+        )}
 
         {/* List */}
         <div className="border-t border-brand-line">
