@@ -386,14 +386,38 @@ export const JOBS: Job[] = [
   // ——— TASHKENT (our office: tashkent) ————————————————————————
   make({
     slug: 'sales-agent-business-class-tashkent',
-    title: 'Sales agent for business class',
+    title: 'SummitStone travel agent',
     team: 'Sales',
     type: 'Contract',
     location: 'Tashkent',
     branch: 'tashkent',
     company: 'summitstone',
     division: 'TREVOLUTION',
-    summary: 'Premium-cabin ticket sales to English-speaking markets.',
+    summary:
+      'Collaborate with elite sales professionals in luxury travel, serving VIP clients worldwide with bespoke, white-glove travel solutions.',
+    description: [
+      'Act as a trusted advisor, providing expert guidance to English-speaking clients on premium travel services (strictly inbound/consultative, no telemarketing).',
+      'Design and present highly personalized recommendations for luxury international flights and top-tier accommodations.',
+      'Deliver prompt, white-glove customer service that consistently exceeds client expectations.',
+      'Cultivate and nurture lasting relationships with a global clientele, driving high satisfaction and long-term loyalty.',
+    ],
+    requirements: [
+      'Exceptional persuasion, communication, and negotiation skills.',
+      'Native or near-native fluency in written and spoken English; additional languages are a distinct advantage.',
+      'Proven sales experience coupled with a deep understanding of premium customer service standards.',
+      'Strong computer literacy with the agility to master new booking platforms and tools quickly.',
+      'An insatiable drive to learn, develop, and advance within the organization.',
+      'Boundless positive energy and a results-driven mindset focused on meeting and exceeding targets.',
+    ],
+    benefits: [
+      'US-based commission scheme with uncapped earning potential up to $10,000/month.',
+      '5-day work week with flexible night shifts (8 PM-5 AM or 9 PM-6 AM), designed to accommodate students or daytime freedom.',
+      'Clear advancement path within your first 12 months.',
+      'World-class mentorship, comprehensive training, and personal development led by experienced travel and sales professionals.',
+      'Modern, comfortable office in the heart of Tashkent.',
+      'International career opportunities across SummitStone offices in four countries.',
+      'Motivational perks, complimentary coffee, weekly surprises, and engaging corporate events year-round.',
+    ],
     postedAt: '2026-04-12',
   }),
 
